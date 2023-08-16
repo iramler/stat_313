@@ -1,0 +1,62 @@
+# Syllabus {.unnumbered}
+
+## Course Description
+
+In previous Statistics courses, normality and independence of errors (residuals) were fundamental assumptions of the models encountered. However, in the real world, things are not always normal or independent. This course is a continuation of STAT 213 and will cover more advanced techniques such as generalized linear models (including Poisson regression and Logistic regression) and multilevel models so that students can develop statistical models in a wider range of real-world situations.
+
+## Course Goals
+
+After taking this course, you should be able to
+
+-   Use appropriate graphical and wrangling techniques to determine which variables are potentially useful in a statistical model, and how those variables should be used
+-   Recognize when it is not appropriate to use a multiple linear regression model (least squares)
+-   Understand the basic concept of a likelihood function and how to use likelihood functions for hypothesis testing
+-   Fit and use general linear models, particularly Poisson regression and Logistic regression models
+-   Fit and use multilevel models
+
+## Course Materials
+
+-   **Textbook:** Beyond Multiple Linear Regression: Applied Generalized Linear Models and Multilevel Models in R by Roback and Legler (available on Bookdown: <https://bookdown.org/roback/bookdown-BeyondMLR/>)
+
++ **R and R Studio:** We will be using R for this course. You will be expected to have both R and R Studio installed on your own computer.
+
++ **GitHub:**  Data and Code outlines will be stored on GitHub at [https://github.com/iramler/stat_313](https://github.com/iramler/stat_313){target="_blank"}. You will need to install Git on your own computer and connect R Studio to it.
+
++ **Canvas:** Canvas will used mainly for displaying aggregate grades, submitting some assignments, and as a repository for useful links.
+
+
+
+## Time and Location
+
+-   MWF 10:30 am - 11:30
+-   Valentine Hall 124
+
+## Instructor
+
+-   Dr. Ivan Ramler
+    -   124 Bewkes Hall
+    -   e: [iramler\@stlawu.edu](mailto:iramler@stlawu.edu){.email}
+    -   Office Hours: MW 1:00 - 2:30 or by appointment
+        -   [Zoom Option](https://stlawu.zoom.us/my/iramler){target="_blank"}
+
+## Course Policies
+
+### Attendance
+
+Unless ill or otherwise instructed by health officials, students are expected to attend class. The material for each class builds on the previous day's material, so missing a class can be detrimental to your understanding of the course material (and hence your success in the course!). In the event you are ill (for whatever reason) and cannot attend class, I do appreciate those who send a brief email letting me know beforehand. Regardless of your reason, if you do miss a class, it is your responsibility to get the information you missed before the next class. Any graded in-class work that is missed cannot be made up (but please see the assignment drop policy for homework and quizzes below as you can miss a few assignments with no direct penalty). Preparation for class
+
+Each day I will expect that you will have read the previously assigned chapters/section, reviewed previous notes, attempted the previously assigned homework, and come to class on time. The pace of the class will assume that you are not copying down everything for a slide. I will post slides on Canvas that you can print before class if you prefer.
+
+Canvas/T drive/Off-campus access to materials Course materials (with the exception of any data sets) will be found on our Canvas site. In class, we will frequently use the T ("classes") drive to access data sets for the course. If you are off-campus and need access to the T drive, the easiest way is the SLU Remote Desktop https://stlawu.teamdynamix.com/TDClient/1805/Portal/KB/ArticleDet?ID=130979
+
+### Computing
+
+We will use the statistical software package, Minitab, which is available on Windows computers in campus labs and through the SLU Remote Desktop. Note that the use of Excel will not be acceptable for statistical analyses in this class. Excel is a program that can do many capable thing, including data management, but it does not do an adequate job of creating statistical summaries, particularly graphical ones.
+
+### Personal Electronic Devices
+
+Use of personal electronic devices (such as cell phones, smart phones, laptops, etc.) will not be permitted during class. Further, if you are caught using one of these devices during a quiz or exam, this will automatically be considered an incident of academic dishonesty and you will receive a 0 on that assignment and be reported to Academic Honor Council.
+
+### Use of Online Sources
+
+Students are expected to engage actively with the subject matter and submit their own work for assignments. Additionally, students are welcome to explore online tools, including generative AI (e.g., chatGPT and Bard), to enhance their comprehension of statistical concepts. While submitting original work remains a requirement, utilizing online resources can provide valuable supplementary assistance. Online tools can assist in generating examples, visualizations, and scenarios, fostering deeper understanding of statistical principles. However, it is essential to use these tools responsibly, ensuring that the submitted work reflects individual learning and critical thinking. Embracing these online resources as aids can enrich your learning experience and reinforce your grasp of statistical concepts.

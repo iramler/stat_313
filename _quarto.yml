@@ -1,0 +1,32 @@
+project:
+  type: book
+
+book:
+  title: "stat_313"
+  author: "Ivan Ramler"
+  date: "8/15/2023"
+  reader-mode: true
+  page-footer:
+    left: |
+      Course Materials were written by Ivan Ramler for STAT 313 at St. Lawrence University.
+    right: |
+      This book was built with <a href="https://quarto.org/">Quarto</a>.
+  
+  chapters:
+    - index.qmd
+    - part: Multiple Linear Regression
+    - part: Likelihood
+    - part: General Linear Models (glm)
+    - part: Correlated Data Models
+
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+
