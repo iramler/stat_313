@@ -18,36 +18,39 @@ After taking this course, you should be able to
 
 -   **Textbook:** Beyond Multiple Linear Regression: Applied Generalized Linear Models and Multilevel Models in R by Roback and Legler (available on Bookdown: <https://bookdown.org/roback/bookdown-BeyondMLR/>)
 
-+ **R and R Studio:** We will be using R for this course. You will be expected to have both R and R Studio installed on your own computer.
+-   **R and R Studio:** We will be using R for this course. You will be expected to have both R and R Studio installed on your own computer.
 
-+ **GitHub:**  Data and Code outlines will be stored on GitHub at [https://github.com/iramler/stat_313](https://github.com/iramler/stat_313){target="_blank"}. You will need to install Git on your own computer and connect R Studio to it.
+-   **GitHub:** Data and Code outlines will be stored on GitHub at [https://github.com/iramler/stat_313](https://github.com/iramler/stat_313){target="_blank"}. You will need to install Git on your own computer and connect R Studio to it.
 
-+ **Canvas:** Canvas will used mainly for displaying aggregate grades, submitting some assignments, and as a repository for useful links.
+-   **Canvas:** Canvas will used mainly for displaying aggregate grades, submitting some assignments, and as a repository for useful links.
 
-
+-   **Laptop:** You will need a laptop capable of running R, R Studio, and connecting to GitHub for this course. You are expected to bring it to class each day.
 
 ## Time and Location
 
--   MWF 10:30 am - 11:30
--   Valentine Hall 124
+-   MW 8:50 am - 10:20
+-   Bewkes Hall 107
 
 ## Instructor
 
 -   Dr. Ivan Ramler
     -   124 Bewkes Hall
     -   e: [iramler\@stlawu.edu](mailto:iramler@stlawu.edu){.email}
-    -   Office Hours: MW 1:00 - 2:30 or by appointment
+    -   Office Hours: To be determined
         -   [Zoom Option](https://stlawu.zoom.us/my/iramler){target="_blank"}
+        -   \[Sign up via Starfish:\] Forthcoming
 
 ## Course Policies
 
 ### Attendance
 
-Unless ill or otherwise instructed by health officials, students are expected to attend class. The material for each class builds on the previous day's material, so missing a class can be detrimental to your understanding of the course material (and hence your success in the course!). In the event you are ill (for whatever reason) and cannot attend class, I do appreciate those who send a brief email letting me know beforehand. Regardless of your reason, if you do miss a class, it is your responsibility to get the information you missed before the next class. Any graded in-class work that is missed cannot be made up (but please see the assignment drop policy for homework and quizzes below as you can miss a few assignments with no direct penalty). Preparation for class
+Unless ill or otherwise instructed by health officials, students are expected to attend class. The material for each class builds on the previous day's material, so missing a class can be detrimental to your understanding of the course material (and hence your success in the course!). In the event you are ill (for whatever reason) and cannot attend class, I do appreciate those who send a brief email letting me know beforehand. Regardless of your reason, if you do miss a class, it is your responsibility to get the information you missed before the next class.
 
-Each day I will expect that you will have read the previously assigned chapters/section, reviewed previous notes, attempted the previously assigned homework, and come to class on time. The pace of the class will assume that you are not copying down everything for a slide. I will post slides on Canvas that you can print before class if you prefer.
+The pace of the class will assume that you are not copying down everything for a slide.
 
-Canvas/T drive/Off-campus access to materials Course materials (with the exception of any data sets) will be found on our Canvas site. In class, we will frequently use the T ("classes") drive to access data sets for the course. If you are off-campus and need access to the T drive, the easiest way is the SLU Remote Desktop https://stlawu.teamdynamix.com/TDClient/1805/Portal/KB/ArticleDet?ID=130979
+### Preparation
+
+A significant part of the statistical modeling process is exploratory and can be time-consuming. Rather than go through that process in class every time, I expect that you will spend time outside of class preparing for the next lecture. This may look different depending upon the topic we are covering. For example, it might involve graphically exploring a new example dataset to get ideas about what a statistical model might be, or fitting preliminary models. Often it will involve writing code in the Quarto outline that I provide. To ensure that you complete the assigned task prior to the start of the next class period, you will often be asked to complete a straightforward, short Canvas quiz PRIOR to the start of the next class period. Note this quiz will often ask you to upload your Quarto file.
 
 ### Computing
 
@@ -55,8 +58,116 @@ We will use the statistical software package, Minitab, which is available on Win
 
 ### Personal Electronic Devices
 
-Use of personal electronic devices (such as cell phones, smart phones, laptops, etc.) will not be permitted during class. Further, if you are caught using one of these devices during a quiz or exam, this will automatically be considered an incident of academic dishonesty and you will receive a 0 on that assignment and be reported to Academic Honor Council.
+As stated above, you will need a laptop capable of running R, R Studio, and connecting to Git. Use of other personal electronic devices (such as cell phones, smart phones, etc.) will not be permitted during class.
+
+Please note that if you are caught using an unapproved device during a quiz or exam, this will automatically be considered an incident of academic dishonesty and you will receive a 0 on that assignment and be reported to Academic Honor Council.
 
 ### Use of Online Sources
 
-Students are expected to engage actively with the subject matter and submit their own work for assignments. Additionally, students are welcome to explore online tools, including generative AI (e.g., chatGPT and Bard), to enhance their comprehension of statistical concepts. While submitting original work remains a requirement, utilizing online resources can provide valuable supplementary assistance. Online tools can assist in generating examples, visualizations, and scenarios, fostering deeper understanding of statistical principles. However, it is essential to use these tools responsibly, ensuring that the submitted work reflects individual learning and critical thinking. Embracing these online resources as aids can enrich your learning experience and reinforce your grasp of statistical concepts.
+Students are expected to engage actively with the subject matter and submit their own work for assignments. Additionally, unless otherwise directed for specific assignments, students are welcome to explore online tools, including generative AI (e.g., chatGPT and Bard), to enhance their comprehension of statistical concepts.
+
+While submitting original work remains a requirement, utilizing online resources can provide valuable supplementary assistance. Online tools can assist in generating examples, visualizations, and scenarios, fostering deeper understanding of statistical principles. However, it is essential to use these tools responsibly, ensuring that the submitted work reflects individual learning and critical thinking. Embracing these online resources as aids can enrich your learning experience and reinforce your grasp of statistical concepts.
+
+## Graded Work
+
+### Homework
+
+Homework problems will be assigned nearly every day. They are intended to help you prepare for quizzes, mini-projects, and exams, but they will not be collected. While technically ungraded, due to their nature, they are likely positively associated (a.k.a., correlated) with quizzes, mini-projects, and exams.
+
+### In-Class Quizzes
+
+Most Mondays we will have a quiz. These quizzes will be based on the topics covered (and homework assigned) in the prior week. Your lowest quiz score will be dropped at the end of the semester.
+
+### Exams
+
+We will have two in-class exams; it is possible that the exams will have a take-home component. Make-ups will not be given for exams unless your absence was cleared with me in advance. There will not be a final exam for the course; however, we will use the final exam period (Thursday, December 14, 1:30-4:30pm) to complete one of the components of the group project.
+
+### Mini-Projects
+
+There will be several (estimate: 6) mini-projects of varying sizes assigned throughout the semester. They typically will be assigned at the end of every chapter/topic. More details will be forthcoming; however, I will expect that these assignments be typed in Quarto and submitted through Canvas, unless otherwise specified. Some of the topics required for projects may not be directly covered in lecture.
+
+-   Late Assignments: You are allowed two no penalty 24-hour extensions on mini-projects this semester. You must notify me before the due date that you plan to use your extension. Once you have used your extensions, any other late projects will receive a 25 percentage point penalty per day.
+
+### Group Project
+
+The semester will culminate with a significant project that will involve group and individual components. You will work with a dataset that fits one of the themes of the course, identify research goals and questions relevant to the dataset, use techniques from the course to model the data and address those research goals, and submit a paper as a group. Each individual will submit a recorded presentation on the project (details will be forthcoming). In the final exam period, each individual will receive a list of questions related to the project (group members should expect to receive similar question) to which you will be asked to provide written responses (details will be forthcoming). No extensions on the deadlines for this project will be allowed.
+
+## Grading
+
+Percentage grade the course will be determined according to the performance on the each of the assignment categories according to the following weighted average.
+
+-   Class Preparation: 10%
+-   In-class Quizzes: 17%
+-   Higher Exam Score: 25%
+-   Lower Exam Score: 22%
+-   Mini-Projects: 15%
+-   Final Project: 11%
+
+A rough grade scale for the class is as follows. I reserve the right to lower this scale without informing the class if I deem it necessary.
+
+| Grade   | 4.0 | 3.75 | 3.5 | 3.25 | 3.0 | 2.75 | 2.5 | 2.25 | 2.0 | 1.75 | 1.5 | 1.25 | 1.0 |
+|---------|-----|------|-----|------|-----|------|-----|------|-----|------|-----|------|-----|
+| Percent | 95  | 92   | 89  | 86   | 83  | 81   | 77  | 75   | 72  | 70   | 67  | 64   | 60  |
+
+### Pass/Fail
+
+Pass/Fail is available to eligible students in this course. A passing grade is equivalent to a 1.0 or higher. According to University policy, to be considered eligible, you must not be a declared major or minor in a field where STAT 313 is either required or will be used as an elective.
+
+## University Policies
+
+Recall that University policies supersede any instructor specific policies. I would also like to make you aware of several that are likely relevant to this course.
+
+### Student Accessibility Services
+
+It is the policy and practice of St. Lawrence University to create inclusive and accessible learning environments consistent with federal and state law. If you have established accommodations with the Student Accessibility Services Office in the past, please activate your accommodations so we can discuss how they will be implemented in this course.
+
+If you have not yet established services through the Student Accessibility Services Office but have a temporary health condition or permanent disability that requires accommodations (conditions include but not limited to; mental health, attention-related, learning, vision, hearing, physical or health impacts), please contact the Student Accessibility Services Office directly to set up a meeting. The Student Accessibility Services Office will work with you on the interactive process that establishes reasonable accommodations.
+
+Color Vision Deficiency: The Student Accessibility Services office can loan glasses for students who are color vision deficient. Please contact the office to make an appointment.
+
+For more specific information about setting up an appointment with Student Accessibility Services please see the options listed below:
+
+Telephone: 315.229.5537
+
+Email: studentaccessibility\@stlawu.edu
+
+Website: <https://www.stlawu.edu/offices/student-accessibility-services>
+
+### Academic Dishonesty
+
+Academic dishonesty will not be tolerated. Any specific policies for this course are supplementary to the Honor Code. According to the St. Lawrence University Academic Honor Policy, "it is assumed that all work is done by the student unless the instructor gives specific permission for collaboration, and honesty requires handing in or presenting original work where originality is required."
+
+Examples of academic dishonesty include a) Submitting someone else's work (from either human or online sources) as your own. b) Use of online sources during quizzes and exams. c) Supplying information to another student knowing that such information will be used in a dishonest way.
+
+Claims of ignorance and academic or personal pressure are unacceptable as excuses for academic dishonesty.
+
+For more information, refer to <https://www.stlawu.edu/offices/academic-affairs/academic-honor-policy>.
+
+To avoid academic dishonesty, it is important that you follow all directions and collaboration rules and ask for clarification if you have any questions about what is acceptable for a particular assignment or exam. If I suspect academic dishonesty, a score of zero will be given for the entire assignment in which the academic dishonesty occurred for all individuals involved and Academic Honor Council will be notified. If a pattern of academic dishonesty is found to have occurred, a grade of 0.0 for the entire course can be given.
+
+It is important to work in a way that maximizes your learning. Be aware that students who rely too much on others (human or online) for the homework and projects tend to do poorly on the quizzes and exams.
+
+## Tentative Schedule
+
+**This schedule could change based on the pace of the class**
+
+| Date  | Topics                                               | Due Dates                        |
+|--------------|-----------------------------------|-----------------------|
+| 8/23  | Review of MLR                                        |                                  |
+| 8/28  | Review of MLR                                        | Assign MP 1; Due 9/8             |
+| 8/30  | Maximum Likelihood (Likelihood Functions, etc.)      |                                  |
+| 9/4   | Maximum Likelihood (Model Comp., Hypothesis Tests)   | Quiz                             |
+| 9/6   | Maximum Likelihood (Wrap-up); Probability            |                                  |
+| 9/11  | Poisson Regression (When to use, etc.); Quiz         | Assign MP 2; Due 9/20            |
+| 9/13  | Poisson Regression (Interp., Offsets, More Inf.)     |                                  |
+| 9/18  | Poisson Regression (Lack of Fit, Overdispersion)     | Quiz                             |
+| 9/20  | Poisson Regression (Zero-inflated Poisson)           | Assign MP 3; Due 10/6            |
+| 9/25  | Poisson Regression (Wrap-up); General Linear Models  | Quiz                             |
+| 9/27  | Binary Logistic Regression (When to use, etc.)       |                                  |
+| 10/2  | Logistic Regression (Binary and Binomial); Quiz      |                                  |
+| 10/4  | Catch-up                                             |                                  |
+| 10/9  | Exam                                                 |                                  |
+| 10/11 | Introduction to Correlated Data                      | Assign MP 4; Due 10/20           |
+| ...   | ...                                                  | ...                              |
+| 12/6  | Project time                                         | Individual Presentations by 12/8 |
+| 12/14 | Final Exam Period (Written questions on group proj.) |                                  |

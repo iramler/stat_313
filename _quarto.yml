@@ -2,7 +2,7 @@ project:
   type: book
 
 book:
-  title: "stat_313"
+  title: "Stat 313 - Advanced Linear Models (Fall 2023)"
   author: "Ivan Ramler"
   date: "8/15/2023"
   reader-mode: true

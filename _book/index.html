@@ -9,7 +9,7 @@
 <meta name="author" content="Ivan Ramler">
 <meta name="dcterms.date" content="2023-08-15">
 
-<title>stat_313</title>
+<title>Stat 313 - Advanced Linear Models (Fall 2023)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -107,7 +73,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Syllabus</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -122,7 +88,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">stat_313</a> 
+      <a href="./">Stat 313 - Advanced Linear Models (Fall 2023)</a> 
         <div class="sidebar-tools-main">
   <a href="" class="quarto-reader-toggle quarto-navigation-tool px-1" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
@@ -142,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Preface</span></a>
+ <span class="menu-text">Syllabus</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -171,7 +137,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
+  <li><a href="#syllabus" id="toc-syllabus" class="nav-link active" data-scroll-target="#syllabus">Syllabus</a>
+  <ul class="collapse">
+  <li><a href="#course-description" id="toc-course-description" class="nav-link" data-scroll-target="#course-description">Course Description</a></li>
+  <li><a href="#course-goals" id="toc-course-goals" class="nav-link" data-scroll-target="#course-goals">Course Goals</a></li>
+  <li><a href="#course-materials" id="toc-course-materials" class="nav-link" data-scroll-target="#course-materials">Course Materials</a></li>
+  <li><a href="#time-and-location" id="toc-time-and-location" class="nav-link" data-scroll-target="#time-and-location">Time and Location</a></li>
+  <li><a href="#instructor" id="toc-instructor" class="nav-link" data-scroll-target="#instructor">Instructor</a></li>
+  <li><a href="#course-policies" id="toc-course-policies" class="nav-link" data-scroll-target="#course-policies">Course Policies</a>
+  <ul class="collapse">
+  <li><a href="#attendance" id="toc-attendance" class="nav-link" data-scroll-target="#attendance">Attendance</a></li>
+  <li><a href="#preparation" id="toc-preparation" class="nav-link" data-scroll-target="#preparation">Preparation</a></li>
+  <li><a href="#computing" id="toc-computing" class="nav-link" data-scroll-target="#computing">Computing</a></li>
+  <li><a href="#personal-electronic-devices" id="toc-personal-electronic-devices" class="nav-link" data-scroll-target="#personal-electronic-devices">Personal Electronic Devices</a></li>
+  <li><a href="#use-of-online-sources" id="toc-use-of-online-sources" class="nav-link" data-scroll-target="#use-of-online-sources">Use of Online Sources</a></li>
+  </ul></li>
+  <li><a href="#graded-work" id="toc-graded-work" class="nav-link" data-scroll-target="#graded-work">Graded Work</a>
+  <ul class="collapse">
+  <li><a href="#homework" id="toc-homework" class="nav-link" data-scroll-target="#homework">Homework</a></li>
+  <li><a href="#in-class-quizzes" id="toc-in-class-quizzes" class="nav-link" data-scroll-target="#in-class-quizzes">In-Class Quizzes</a></li>
+  <li><a href="#exams" id="toc-exams" class="nav-link" data-scroll-target="#exams">Exams</a></li>
+  <li><a href="#mini-projects" id="toc-mini-projects" class="nav-link" data-scroll-target="#mini-projects">Mini-Projects</a></li>
+  <li><a href="#group-project" id="toc-group-project" class="nav-link" data-scroll-target="#group-project">Group Project</a></li>
+  </ul></li>
+  <li><a href="#grading" id="toc-grading" class="nav-link" data-scroll-target="#grading">Grading</a>
+  <ul class="collapse">
+  <li><a href="#passfail" id="toc-passfail" class="nav-link" data-scroll-target="#passfail">Pass/Fail</a></li>
+  </ul></li>
+  <li><a href="#university-policies" id="toc-university-policies" class="nav-link" data-scroll-target="#university-policies">University Policies</a>
+  <ul class="collapse">
+  <li><a href="#student-accessibility-services" id="toc-student-accessibility-services" class="nav-link" data-scroll-target="#student-accessibility-services">Student Accessibility Services</a></li>
+  <li><a href="#academic-dishonesty" id="toc-academic-dishonesty" class="nav-link" data-scroll-target="#academic-dishonesty">Academic Dishonesty</a></li>
+  </ul></li>
+  <li><a href="#tentative-schedule" id="toc-tentative-schedule" class="nav-link" data-scroll-target="#tentative-schedule">Tentative Schedule</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -180,7 +179,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">stat_313</h1>
+<h1 class="title">Stat 313 - Advanced Linear Models (Fall 2023)</h1>
 </div>
 
 
@@ -207,18 +206,313 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<p>This is a Quarto book.</p>
-<p>To learn more about Quarto books visit <a href="https://quarto.org/docs/books" class="uri">https://quarto.org/docs/books</a>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
-</div>
-</div>
+<section id="syllabus" class="level1 unnumbered">
+<h1 class="unnumbered">Syllabus</h1>
+<section id="course-description" class="level2">
+<h2 class="anchored" data-anchor-id="course-description">Course Description</h2>
+<p>In previous Statistics courses, normality and independence of errors (residuals) were fundamental assumptions of the models encountered. However, in the real world, things are not always normal or independent. This course is a continuation of STAT 213 and will cover more advanced techniques such as generalized linear models (including Poisson regression and Logistic regression) and multilevel models so that students can develop statistical models in a wider range of real-world situations.</p>
+</section>
+<section id="course-goals" class="level2">
+<h2 class="anchored" data-anchor-id="course-goals">Course Goals</h2>
+<p>After taking this course, you should be able to</p>
+<ul>
+<li>Use appropriate graphical and wrangling techniques to determine which variables are potentially useful in a statistical model, and how those variables should be used</li>
+<li>Recognize when it is not appropriate to use a multiple linear regression model (least squares)</li>
+<li>Understand the basic concept of a likelihood function and how to use likelihood functions for hypothesis testing</li>
+<li>Fit and use general linear models, particularly Poisson regression and Logistic regression models</li>
+<li>Fit and use multilevel models</li>
+</ul>
+</section>
+<section id="course-materials" class="level2">
+<h2 class="anchored" data-anchor-id="course-materials">Course Materials</h2>
+<ul>
+<li><p><strong>Textbook:</strong> Beyond Multiple Linear Regression: Applied Generalized Linear Models and Multilevel Models in R by Roback and Legler (available on Bookdown: <a href="https://bookdown.org/roback/bookdown-BeyondMLR/" class="uri">https://bookdown.org/roback/bookdown-BeyondMLR/</a>)</p></li>
+<li><p><strong>R and R Studio:</strong> We will be using R for this course. You will be expected to have both R and R Studio installed on your own computer.</p></li>
+<li><p><strong>GitHub:</strong> Data and Code outlines will be stored on GitHub at <a href="https://github.com/iramler/stat_313" target="_blank">https://github.com/iramler/stat_313</a>. You will need to install Git on your own computer and connect R Studio to it.</p></li>
+<li><p><strong>Canvas:</strong> Canvas will used mainly for displaying aggregate grades, submitting some assignments, and as a repository for useful links.</p></li>
+<li><p><strong>Laptop:</strong> You will need a laptop capable of running R, R Studio, and connecting to GitHub for this course. You are expected to bring it to class each day.</p></li>
+</ul>
+</section>
+<section id="time-and-location" class="level2">
+<h2 class="anchored" data-anchor-id="time-and-location">Time and Location</h2>
+<ul>
+<li>MW 8:50 am - 10:20</li>
+<li>Bewkes Hall 107</li>
+</ul>
+</section>
+<section id="instructor" class="level2">
+<h2 class="anchored" data-anchor-id="instructor">Instructor</h2>
+<ul>
+<li>Dr.&nbsp;Ivan Ramler
+<ul>
+<li>124 Bewkes Hall</li>
+<li>e: <a href="mailto:iramler@stlawu.edu" class="email">iramler@stlawu.edu</a></li>
+<li>Office Hours: To be determined
+<ul>
+<li><a href="https://stlawu.zoom.us/my/iramler" target="_blank">Zoom Option</a></li>
+<li>[Sign up via Starfish:] Forthcoming</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="course-policies" class="level2">
+<h2 class="anchored" data-anchor-id="course-policies">Course Policies</h2>
+<section id="attendance" class="level3">
+<h3 class="anchored" data-anchor-id="attendance">Attendance</h3>
+<p>Unless ill or otherwise instructed by health officials, students are expected to attend class. The material for each class builds on the previous day’s material, so missing a class can be detrimental to your understanding of the course material (and hence your success in the course!). In the event you are ill (for whatever reason) and cannot attend class, I do appreciate those who send a brief email letting me know beforehand. Regardless of your reason, if you do miss a class, it is your responsibility to get the information you missed before the next class.</p>
+<p>The pace of the class will assume that you are not copying down everything for a slide.</p>
+</section>
+<section id="preparation" class="level3">
+<h3 class="anchored" data-anchor-id="preparation">Preparation</h3>
+<p>A significant part of the statistical modeling process is exploratory and can be time-consuming. Rather than go through that process in class every time, I expect that you will spend time outside of class preparing for the next lecture. This may look different depending upon the topic we are covering. For example, it might involve graphically exploring a new example dataset to get ideas about what a statistical model might be, or fitting preliminary models. Often it will involve writing code in the Quarto outline that I provide. To ensure that you complete the assigned task prior to the start of the next class period, you will often be asked to complete a straightforward, short Canvas quiz PRIOR to the start of the next class period. Note this quiz will often ask you to upload your Quarto file.</p>
+</section>
+<section id="computing" class="level3">
+<h3 class="anchored" data-anchor-id="computing">Computing</h3>
+<p>We will use the statistical software package, Minitab, which is available on Windows computers in campus labs and through the SLU Remote Desktop. Note that the use of Excel will not be acceptable for statistical analyses in this class. Excel is a program that can do many capable thing, including data management, but it does not do an adequate job of creating statistical summaries, particularly graphical ones.</p>
+</section>
+<section id="personal-electronic-devices" class="level3">
+<h3 class="anchored" data-anchor-id="personal-electronic-devices">Personal Electronic Devices</h3>
+<p>As stated above, you will need a laptop capable of running R, R Studio, and connecting to Git. Use of other personal electronic devices (such as cell phones, smart phones, etc.) will not be permitted during class.</p>
+<p>Please note that if you are caught using an unapproved device during a quiz or exam, this will automatically be considered an incident of academic dishonesty and you will receive a 0 on that assignment and be reported to Academic Honor Council.</p>
+</section>
+<section id="use-of-online-sources" class="level3">
+<h3 class="anchored" data-anchor-id="use-of-online-sources">Use of Online Sources</h3>
+<p>Students are expected to engage actively with the subject matter and submit their own work for assignments. Additionally, unless otherwise directed for specific assignments, students are welcome to explore online tools, including generative AI (e.g., chatGPT and Bard), to enhance their comprehension of statistical concepts.</p>
+<p>While submitting original work remains a requirement, utilizing online resources can provide valuable supplementary assistance. Online tools can assist in generating examples, visualizations, and scenarios, fostering deeper understanding of statistical principles. However, it is essential to use these tools responsibly, ensuring that the submitted work reflects individual learning and critical thinking. Embracing these online resources as aids can enrich your learning experience and reinforce your grasp of statistical concepts.</p>
+</section>
+</section>
+<section id="graded-work" class="level2">
+<h2 class="anchored" data-anchor-id="graded-work">Graded Work</h2>
+<section id="homework" class="level3">
+<h3 class="anchored" data-anchor-id="homework">Homework</h3>
+<p>Homework problems will be assigned nearly every day. They are intended to help you prepare for quizzes, mini-projects, and exams, but they will not be collected. While technically ungraded, due to their nature, they are likely positively associated (a.k.a., correlated) with quizzes, mini-projects, and exams.</p>
+</section>
+<section id="in-class-quizzes" class="level3">
+<h3 class="anchored" data-anchor-id="in-class-quizzes">In-Class Quizzes</h3>
+<p>Most Mondays we will have a quiz. These quizzes will be based on the topics covered (and homework assigned) in the prior week. Your lowest quiz score will be dropped at the end of the semester.</p>
+</section>
+<section id="exams" class="level3">
+<h3 class="anchored" data-anchor-id="exams">Exams</h3>
+<p>We will have two in-class exams; it is possible that the exams will have a take-home component. Make-ups will not be given for exams unless your absence was cleared with me in advance. There will not be a final exam for the course; however, we will use the final exam period (Thursday, December 14, 1:30-4:30pm) to complete one of the components of the group project.</p>
+</section>
+<section id="mini-projects" class="level3">
+<h3 class="anchored" data-anchor-id="mini-projects">Mini-Projects</h3>
+<p>There will be several (estimate: 6) mini-projects of varying sizes assigned throughout the semester. They typically will be assigned at the end of every chapter/topic. More details will be forthcoming; however, I will expect that these assignments be typed in Quarto and submitted through Canvas, unless otherwise specified. Some of the topics required for projects may not be directly covered in lecture.</p>
+<ul>
+<li>Late Assignments: You are allowed two no penalty 24-hour extensions on mini-projects this semester. You must notify me before the due date that you plan to use your extension. Once you have used your extensions, any other late projects will receive a 25 percentage point penalty per day.</li>
+</ul>
+</section>
+<section id="group-project" class="level3">
+<h3 class="anchored" data-anchor-id="group-project">Group Project</h3>
+<p>The semester will culminate with a significant project that will involve group and individual components. You will work with a dataset that fits one of the themes of the course, identify research goals and questions relevant to the dataset, use techniques from the course to model the data and address those research goals, and submit a paper as a group. Each individual will submit a recorded presentation on the project (details will be forthcoming). In the final exam period, each individual will receive a list of questions related to the project (group members should expect to receive similar question) to which you will be asked to provide written responses (details will be forthcoming). No extensions on the deadlines for this project will be allowed.</p>
+</section>
+</section>
+<section id="grading" class="level2">
+<h2 class="anchored" data-anchor-id="grading">Grading</h2>
+<p>Percentage grade the course will be determined according to the performance on the each of the assignment categories according to the following weighted average.</p>
+<ul>
+<li>Class Preparation: 10%</li>
+<li>In-class Quizzes: 17%</li>
+<li>Higher Exam Score: 25%</li>
+<li>Lower Exam Score: 22%</li>
+<li>Mini-Projects: 15%</li>
+<li>Final Project: 11%</li>
+</ul>
+<p>A rough grade scale for the class is as follows. I reserve the right to lower this scale without informing the class if I deem it necessary.</p>
+<table class="table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 6%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Grade</th>
+<th>4.0</th>
+<th>3.75</th>
+<th>3.5</th>
+<th>3.25</th>
+<th>3.0</th>
+<th>2.75</th>
+<th>2.5</th>
+<th>2.25</th>
+<th>2.0</th>
+<th>1.75</th>
+<th>1.5</th>
+<th>1.25</th>
+<th>1.0</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Percent</td>
+<td>95</td>
+<td>92</td>
+<td>89</td>
+<td>86</td>
+<td>83</td>
+<td>81</td>
+<td>77</td>
+<td>75</td>
+<td>72</td>
+<td>70</td>
+<td>67</td>
+<td>64</td>
+<td>60</td>
+</tr>
+</tbody>
+</table>
+<section id="passfail" class="level3">
+<h3 class="anchored" data-anchor-id="passfail">Pass/Fail</h3>
+<p>Pass/Fail is available to eligible students in this course. A passing grade is equivalent to a 1.0 or higher. According to University policy, to be considered eligible, you must not be a declared major or minor in a field where STAT 313 is either required or will be used as an elective.</p>
+</section>
+</section>
+<section id="university-policies" class="level2">
+<h2 class="anchored" data-anchor-id="university-policies">University Policies</h2>
+<p>Recall that University policies supersede any instructor specific policies. I would also like to make you aware of several that are likely relevant to this course.</p>
+<section id="student-accessibility-services" class="level3">
+<h3 class="anchored" data-anchor-id="student-accessibility-services">Student Accessibility Services</h3>
+<p>It is the policy and practice of St.&nbsp;Lawrence University to create inclusive and accessible learning environments consistent with federal and state law. If you have established accommodations with the Student Accessibility Services Office in the past, please activate your accommodations so we can discuss how they will be implemented in this course.</p>
+<p>If you have not yet established services through the Student Accessibility Services Office but have a temporary health condition or permanent disability that requires accommodations (conditions include but not limited to; mental health, attention-related, learning, vision, hearing, physical or health impacts), please contact the Student Accessibility Services Office directly to set up a meeting. The Student Accessibility Services Office will work with you on the interactive process that establishes reasonable accommodations.</p>
+<p>Color Vision Deficiency: The Student Accessibility Services office can loan glasses for students who are color vision deficient. Please contact the office to make an appointment.</p>
+<p>For more specific information about setting up an appointment with Student Accessibility Services please see the options listed below:</p>
+<p>Telephone: 315.229.5537</p>
+<p>Email: studentaccessibility@stlawu.edu</p>
+<p>Website: <a href="https://www.stlawu.edu/offices/student-accessibility-services" class="uri">https://www.stlawu.edu/offices/student-accessibility-services</a></p>
+</section>
+<section id="academic-dishonesty" class="level3">
+<h3 class="anchored" data-anchor-id="academic-dishonesty">Academic Dishonesty</h3>
+<p>Academic dishonesty will not be tolerated. Any specific policies for this course are supplementary to the Honor Code. According to the St.&nbsp;Lawrence University Academic Honor Policy, “it is assumed that all work is done by the student unless the instructor gives specific permission for collaboration, and honesty requires handing in or presenting original work where originality is required.”</p>
+<p>Examples of academic dishonesty include a) Submitting someone else’s work (from either human or online sources) as your own. b) Use of online sources during quizzes and exams. c) Supplying information to another student knowing that such information will be used in a dishonest way.</p>
+<p>Claims of ignorance and academic or personal pressure are unacceptable as excuses for academic dishonesty.</p>
+<p>For more information, refer to <a href="https://www.stlawu.edu/offices/academic-affairs/academic-honor-policy" class="uri">https://www.stlawu.edu/offices/academic-affairs/academic-honor-policy</a>.</p>
+<p>To avoid academic dishonesty, it is important that you follow all directions and collaboration rules and ask for clarification if you have any questions about what is acceptable for a particular assignment or exam. If I suspect academic dishonesty, a score of zero will be given for the entire assignment in which the academic dishonesty occurred for all individuals involved and Academic Honor Council will be notified. If a pattern of academic dishonesty is found to have occurred, a grade of 0.0 for the entire course can be given.</p>
+<p>It is important to work in a way that maximizes your learning. Be aware that students who rely too much on others (human or online) for the homework and projects tend to do poorly on the quizzes and exams.</p>
+</section>
+</section>
+<section id="tentative-schedule" class="level2">
+<h2 class="anchored" data-anchor-id="tentative-schedule">Tentative Schedule</h2>
+<p><strong>This schedule could change based on the pace of the class</strong></p>
+<table class="table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 48%">
+<col style="width: 31%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Date</th>
+<th>Topics</th>
+<th>Due Dates</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>8/23</td>
+<td>Review of MLR</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>8/28</td>
+<td>Review of MLR</td>
+<td>Assign MP 1; Due 9/8</td>
+</tr>
+<tr class="odd">
+<td>8/30</td>
+<td>Maximum Likelihood (Likelihood Functions, etc.)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>9/4</td>
+<td>Maximum Likelihood (Model Comp., Hypothesis Tests)</td>
+<td>Quiz</td>
+</tr>
+<tr class="odd">
+<td>9/6</td>
+<td>Maximum Likelihood (Wrap-up); Probability</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>9/11</td>
+<td>Poisson Regression (When to use, etc.); Quiz</td>
+<td>Assign MP 2; Due 9/20</td>
+</tr>
+<tr class="odd">
+<td>9/13</td>
+<td>Poisson Regression (Interp., Offsets, More Inf.)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>9/18</td>
+<td>Poisson Regression (Lack of Fit, Overdispersion)</td>
+<td>Quiz</td>
+</tr>
+<tr class="odd">
+<td>9/20</td>
+<td>Poisson Regression (Zero-inflated Poisson)</td>
+<td>Assign MP 3; Due 10/6</td>
+</tr>
+<tr class="even">
+<td>9/25</td>
+<td>Poisson Regression (Wrap-up); General Linear Models</td>
+<td>Quiz</td>
+</tr>
+<tr class="odd">
+<td>9/27</td>
+<td>Binary Logistic Regression (When to use, etc.)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>10/2</td>
+<td>Logistic Regression (Binary and Binomial); Quiz</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>10/4</td>
+<td>Catch-up</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>10/9</td>
+<td>Exam</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>10/11</td>
+<td>Introduction to Correlated Data</td>
+<td>Assign MP 4; Due 10/20</td>
+</tr>
+<tr class="even">
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr class="odd">
+<td>12/6</td>
+<td>Project time</td>
+<td>Individual Presentations by 12/8</td>
+</tr>
+<tr class="even">
+<td>12/14</td>
+<td>Final Exam Period (Written questions on group proj.)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
