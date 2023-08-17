@@ -77,6 +77,9 @@ Students are expected to engage actively with the subject matter and submit thei
 
 While submitting original work remains a requirement, utilizing online resources can provide valuable supplementary assistance. Online tools can assist in generating examples, visualizations, and scenarios, fostering deeper understanding of statistical principles. However, it is essential to use these tools responsibly, ensuring that the submitted work reflects individual learning and critical thinking. Embracing these online resources as aids can enrich your learning experience and reinforce your grasp of statistical concepts.
 
+_chatGPT assisted in writing this statement._
+
+
 ## Graded Work
 
 ### Homework
