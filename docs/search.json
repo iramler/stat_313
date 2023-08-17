@@ -2,77 +2,77 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Stat 313 - Advanced Linear Models (Fall 2023)",
+    "title": "Stat 313: Advanced Linear Models",
     "section": "",
     "text": "Syllabus"
   },
   {
     "objectID": "index.html#course-description",
     "href": "index.html#course-description",
-    "title": "Stat 313 - Advanced Linear Models (Fall 2023)",
+    "title": "Stat 313: Advanced Linear Models",
     "section": "Course Description",
     "text": "Course Description\nIn previous Statistics courses, normality and independence of errors (residuals) were fundamental assumptions of the models encountered. However, in the real world, things are not always normal or independent. This course is a continuation of STAT 213 and will cover more advanced techniques such as generalized linear models (including Poisson regression and Logistic regression) and multilevel models so that students can develop statistical models in a wider range of real-world situations."
   },
   {
     "objectID": "index.html#course-goals",
     "href": "index.html#course-goals",
-    "title": "Stat 313 - Advanced Linear Models (Fall 2023)",
+    "title": "Stat 313: Advanced Linear Models",
     "section": "Course Goals",
     "text": "Course Goals\nAfter taking this course, you should be able to\n\nUse appropriate graphical and wrangling techniques to determine which variables are potentially useful in a statistical model, and how those variables should be used\nRecognize when it is not appropriate to use a multiple linear regression model (least squares)\nUnderstand the basic concept of a likelihood function and how to use likelihood functions for hypothesis testing\nFit and use general linear models, particularly Poisson regression and Logistic regression models\nFit and use multilevel models"
   },
   {
     "objectID": "index.html#course-materials",
     "href": "index.html#course-materials",
-    "title": "Stat 313 - Advanced Linear Models (Fall 2023)",
+    "title": "Stat 313: Advanced Linear Models",
     "section": "Course Materials",
     "text": "Course Materials\n\nTextbook: Beyond Multiple Linear Regression: Applied Generalized Linear Models and Multilevel Models in R by Roback and Legler (available on Bookdown: https://bookdown.org/roback/bookdown-BeyondMLR/)\nR and R Studio: We will be using R for this course. You will be expected to have both R and R Studio installed on your own computer.\nGitHub: Data and Code outlines will be stored on GitHub at https://github.com/iramler/stat_313. You will need to install Git on your own computer and connect R Studio to it.\nCanvas: Canvas will used mainly for displaying aggregate grades, submitting some assignments, and as a repository for useful links.\nLaptop: You will need a laptop capable of running R, R Studio, and connecting to GitHub for this course. You are expected to bring it to class each day."
   },
   {
     "objectID": "index.html#time-and-location",
     "href": "index.html#time-and-location",
-    "title": "Stat 313 - Advanced Linear Models (Fall 2023)",
+    "title": "Stat 313: Advanced Linear Models",
     "section": "Time and Location",
     "text": "Time and Location\n\nMW 8:50 am - 10:20\nBewkes Hall 107"
   },
   {
     "objectID": "index.html#instructor",
     "href": "index.html#instructor",
-    "title": "Stat 313 - Advanced Linear Models (Fall 2023)",
+    "title": "Stat 313: Advanced Linear Models",
     "section": "Instructor",
     "text": "Instructor\n\nDr. Ivan Ramler\n\n124 Bewkes Hall\ne: iramler@stlawu.edu\nOffice Hours: To be determined\n\nZoom Option\n[Sign up via Starfish:] Forthcoming"
   },
   {
     "objectID": "index.html#course-policies",
     "href": "index.html#course-policies",
-    "title": "Stat 313 - Advanced Linear Models (Fall 2023)",
+    "title": "Stat 313: Advanced Linear Models",
     "section": "Course Policies",
     "text": "Course Policies\n\nAttendance\nUnless ill or otherwise instructed by health officials, students are expected to attend class. The material for each class builds on the previous day’s material, so missing a class can be detrimental to your understanding of the course material (and hence your success in the course!). In the event you are ill (for whatever reason) and cannot attend class, I do appreciate those who send a brief email letting me know beforehand. Regardless of your reason, if you do miss a class, it is your responsibility to get the information you missed before the next class.\nThe pace of the class will assume that you are not copying down everything for a slide.\n\n\nPreparation\nA significant part of the statistical modeling process is exploratory and can be time-consuming. Rather than go through that process in class every time, I expect that you will spend time outside of class preparing for the next lecture. This may look different depending upon the topic we are covering. For example, it might involve graphically exploring a new example dataset to get ideas about what a statistical model might be, or fitting preliminary models. Often it will involve writing code in the Quarto outline that I provide. To ensure that you complete the assigned task prior to the start of the next class period, you will often be asked to complete a straightforward, short Canvas quiz PRIOR to the start of the next class period. Note this quiz will often ask you to upload your Quarto file.\n\n\nSoftware\nFor this course you will need to install the following on your laptop.\n\nR\nRStudio Desktop\nGit and and account on GitHub\n\nAdditionally, we will be using Quarto for data analysis reports. For those of you that are familiar with R Markdown, Quarto is the next generation version of R Markdown.\nNote: It’s always good to start assignments and projects as early as possible, but this is particularly important to do for assignments and projects involving R. If you start early enough though, you will have plenty of time to seek help and therefore won’t stress out as badly when you you have a coding error.\n\n\nPersonal Electronic Devices\nAs stated above, you will need a laptop capable of running R, R Studio, and connecting to Git. Use of other personal electronic devices (such as cell phones, smart phones, etc.) will not be permitted during class.\nPlease note that if you are caught using an unapproved device during a quiz or exam, this will automatically be considered an incident of academic dishonesty and you will receive a 0 on that assignment and be reported to Academic Honor Council.\n\n\nUse of Online Sources\nStudents are expected to engage actively with the subject matter and submit their own work for assignments. Additionally, unless otherwise directed for specific assignments, students are welcome to explore online tools, including generative AI (e.g., chatGPT and Bard), to enhance their comprehension of statistical concepts.\nWhile submitting original work remains a requirement, utilizing online resources can provide valuable supplementary assistance. Online tools can assist in generating examples, visualizations, and scenarios, fostering deeper understanding of statistical principles. However, it is essential to use these tools responsibly, ensuring that the submitted work reflects individual learning and critical thinking. Embracing these online resources as aids can enrich your learning experience and reinforce your grasp of statistical concepts."
   },
   {
     "objectID": "index.html#graded-work",
     "href": "index.html#graded-work",
-    "title": "Stat 313 - Advanced Linear Models (Fall 2023)",
+    "title": "Stat 313: Advanced Linear Models",
     "section": "Graded Work",
     "text": "Graded Work\n\nHomework\nHomework problems will be assigned nearly every day. They are intended to help you prepare for quizzes, mini-projects, and exams, but they will not be collected. While technically ungraded, due to their nature, they are likely positively associated (a.k.a., correlated) with quizzes, mini-projects, and exams.\n\n\nIn-Class Quizzes\nMost Mondays we will have a quiz. These quizzes will be based on the topics covered (and homework assigned) in the prior week. Your lowest quiz score will be dropped at the end of the semester.\n\n\nExams\nWe will have two in-class exams; it is possible that the exams will have a take-home component. Make-ups will not be given for exams unless your absence was cleared with me in advance. There will not be a final exam for the course; however, we will use the final exam period (Thursday, December 14, 1:30-4:30pm) to complete one of the components of the group project.\n\n\nMini-Projects\nThere will be several (estimate: 6) mini-projects of varying sizes assigned throughout the semester. They typically will be assigned at the end of every chapter/topic. More details will be forthcoming; however, I will expect that these assignments be typed in Quarto and submitted through Canvas, unless otherwise specified. Some of the topics required for projects may not be directly covered in lecture.\n\nLate Assignments: You are allowed two no penalty 24-hour extensions on mini-projects this semester. You must notify me before the due date that you plan to use your extension. Once you have used your extensions, any other late projects will receive a 25 percentage point penalty per day.\n\n\n\nGroup Project\nThe semester will culminate with a significant project that will involve group and individual components. You will work with a dataset that fits one of the themes of the course, identify research goals and questions relevant to the dataset, use techniques from the course to model the data and address those research goals, and submit a paper as a group. Each individual will submit a recorded presentation on the project (details will be forthcoming). In the final exam period, each individual will receive a list of questions related to the project (group members should expect to receive similar question) to which you will be asked to provide written responses (details will be forthcoming). No extensions on the deadlines for this project will be allowed."
   },
   {
     "objectID": "index.html#grading",
     "href": "index.html#grading",
-    "title": "Stat 313 - Advanced Linear Models (Fall 2023)",
+    "title": "Stat 313: Advanced Linear Models",
     "section": "Grading",
     "text": "Grading\nPercentage grade the course will be determined according to the performance on the each of the assignment categories according to the following weighted average.\n\nClass Preparation: 10%\nIn-class Quizzes: 17%\nHigher Exam Score: 25%\nLower Exam Score: 22%\nMini-Projects: 15%\nFinal Project: 11%\n\nA rough grade scale for the class is as follows. I reserve the right to lower this scale without informing the class if I deem it necessary.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGrade\n4.0\n3.75\n3.5\n3.25\n3.0\n2.75\n2.5\n2.25\n2.0\n1.75\n1.5\n1.25\n1.0\n\n\n\n\nPercent\n95\n92\n89\n86\n83\n81\n77\n75\n72\n70\n67\n64\n60\n\n\n\n\nPass/Fail\nPass/Fail is available to eligible students in this course. A passing grade is equivalent to a 1.0 or higher. According to University policy, to be considered eligible, you must not be a declared major or minor in a field where STAT 313 is either required or will be used as an elective."
   },
   {
     "objectID": "index.html#university-policies",
     "href": "index.html#university-policies",
-    "title": "Stat 313 - Advanced Linear Models (Fall 2023)",
+    "title": "Stat 313: Advanced Linear Models",
     "section": "University Policies",
     "text": "University Policies\nRecall that University policies supersede any instructor specific policies. I would also like to make you aware of several that are likely relevant to this course.\n\nStudent Accessibility Services\nIt is the policy and practice of St. Lawrence University to create inclusive and accessible learning environments consistent with federal and state law. If you have established accommodations with the Student Accessibility Services Office in the past, please activate your accommodations so we can discuss how they will be implemented in this course.\nIf you have not yet established services through the Student Accessibility Services Office but have a temporary health condition or permanent disability that requires accommodations (conditions include but not limited to; mental health, attention-related, learning, vision, hearing, physical or health impacts), please contact the Student Accessibility Services Office directly to set up a meeting. The Student Accessibility Services Office will work with you on the interactive process that establishes reasonable accommodations.\nColor Vision Deficiency: The Student Accessibility Services office can loan glasses for students who are color vision deficient. Please contact the office to make an appointment.\nFor more specific information about setting up an appointment with Student Accessibility Services please see the options listed below:\nTelephone: 315.229.5537\nEmail: studentaccessibility@stlawu.edu\nWebsite: https://www.stlawu.edu/offices/student-accessibility-services\n\n\nAcademic Dishonesty\nAcademic dishonesty will not be tolerated. Any specific policies for this course are supplementary to the Honor Code. According to the St. Lawrence University Academic Honor Policy, “it is assumed that all work is done by the student unless the instructor gives specific permission for collaboration, and honesty requires handing in or presenting original work where originality is required.”\nExamples of academic dishonesty include a) Submitting someone else’s work (from either human or online sources) as your own. b) Use of online sources during quizzes and exams. c) Supplying information to another student knowing that such information will be used in a dishonest way.\nClaims of ignorance and academic or personal pressure are unacceptable as excuses for academic dishonesty.\nFor more information, refer to https://www.stlawu.edu/offices/academic-affairs/academic-honor-policy.\nTo avoid academic dishonesty, it is important that you follow all directions and collaboration rules and ask for clarification if you have any questions about what is acceptable for a particular assignment or exam. If I suspect academic dishonesty, a score of zero will be given for the entire assignment in which the academic dishonesty occurred for all individuals involved and Academic Honor Council will be notified. If a pattern of academic dishonesty is found to have occurred, a grade of 0.0 for the entire course can be given.\nIt is important to work in a way that maximizes your learning. Be aware that students who rely too much on others (human or online) for the homework and projects tend to do poorly on the quizzes and exams."
   },
   {
     "objectID": "index.html#tentative-schedule",
     "href": "index.html#tentative-schedule",
-    "title": "Stat 313 - Advanced Linear Models (Fall 2023)",
+    "title": "Stat 313: Advanced Linear Models",
     "section": "Tentative Schedule",
     "text": "Tentative Schedule\nThis schedule could change based on the pace of the class\n\n\n\n\n\n\n\n\nDate\nTopics\nDue Dates\n\n\n\n\n8/23\nReview of MLR\n\n\n\n8/28\nReview of MLR\nAssign MP 1; Due 9/8\n\n\n8/30\nMaximum Likelihood (Likelihood Functions, etc.)\n\n\n\n9/4\nMaximum Likelihood (Model Comp., Hypothesis Tests)\nQuiz\n\n\n9/6\nMaximum Likelihood (Wrap-up); Probability\n\n\n\n9/11\nPoisson Regression (When to use, etc.); Quiz\nAssign MP 2; Due 9/20\n\n\n9/13\nPoisson Regression (Interp., Offsets, More Inf.)\n\n\n\n9/18\nPoisson Regression (Lack of Fit, Overdispersion)\nQuiz\n\n\n9/20\nPoisson Regression (Zero-inflated Poisson)\nAssign MP 3; Due 10/6\n\n\n9/25\nPoisson Regression (Wrap-up); General Linear Models\nQuiz\n\n\n9/27\nBinary Logistic Regression (When to use, etc.)\n\n\n\n10/2\nLogistic Regression (Binary and Binomial); Quiz\n\n\n\n10/4\nCatch-up\n\n\n\n10/9\nExam\n\n\n\n10/11\nIntroduction to Correlated Data\nAssign MP 4; Due 10/20\n\n\n…\n…\n…\n\n\n12/6\nProject time\nIndividual Presentations by 12/8\n\n\n12/14\nFinal Exam Period (Written questions on group proj.)"
   },
