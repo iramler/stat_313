@@ -52,9 +52,18 @@ The pace of the class will assume that you are not copying down everything for a
 
 A significant part of the statistical modeling process is exploratory and can be time-consuming. Rather than go through that process in class every time, I expect that you will spend time outside of class preparing for the next lecture. This may look different depending upon the topic we are covering. For example, it might involve graphically exploring a new example dataset to get ideas about what a statistical model might be, or fitting preliminary models. Often it will involve writing code in the Quarto outline that I provide. To ensure that you complete the assigned task prior to the start of the next class period, you will often be asked to complete a straightforward, short Canvas quiz PRIOR to the start of the next class period. Note this quiz will often ask you to upload your Quarto file.
 
-### Computing
+### Software
 
-We will use the statistical software package, Minitab, which is available on Windows computers in campus labs and through the SLU Remote Desktop. Note that the use of Excel will not be acceptable for statistical analyses in this class. Excel is a program that can do many capable thing, including data management, but it does not do an adequate job of creating statistical summaries, particularly graphical ones.
+For this course you will need to install the following on your laptop.
+
+- [R](https://cran.r-project.org/){target="_blank"}
+- [RStudio Desktop](https://posit.co/download/rstudio-desktop/){target="_blank"}
+- [Git](https://github.com/git-guides/install-git){target="_blank"} and and account on [GitHub](https://github.com/){target="_blank"}
+
+
+Additionally, we will be using Quarto for data analysis reports. For those of you that are familiar with R Markdown, Quarto is the next generation version of R Markdown.
+
+Note: It's always good to start assignments and projects as early as possible, but this is particularly important to do for assignments and projects involving R. If you start early enough though, you will have plenty of time to seek help and therefore won't stress out as badly when you you have a coding error.
 
 ### Personal Electronic Devices
 

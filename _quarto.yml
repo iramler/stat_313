@@ -1,5 +1,6 @@
 project:
   type: book
+  output-dir: docs
 
 book:
   title: "Stat 313 - Advanced Linear Models (Fall 2023)"
@@ -14,6 +15,7 @@ book:
   
   chapters:
     - index.qmd
+    - git_command_cheatsheet.qmd
     - part: Multiple Linear Regression
     - part: Likelihood
     - part: General Linear Models (glm)

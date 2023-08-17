@@ -1,0 +1,148 @@
+---
+title: "Git Cheat Sheet"
+format: 
+  html:
+    self-contained: true
+    toc: true
+---
+
+_Special thanks to Dr. Matt Higham for sharing these instructions with us._
+
+## Command Line Cheat Sheet
+
+### Basics
+
+**Staging** Local Changes and Making a **Commit**:
+
+``` default
+git add example_file.R
+git commit --message "A sample commit message"
+```
+
+<br>
+
+**Pushing** Commits to GitHub and **Pulling** from GitHub:
+
+``` default
+git push
+## which usually is short for
+git push origin main
+
+git pull
+
+## pull but only if there is no merge conflict
+git pull --ff-only
+```
+
+<br>
+
+Examining the **log** (recent commits and other info): `git log`
+
+<br>
+
+Locating the Web Address for a **Remote** Repository: `git remote -v`
+
+<br>
+
+### Branches
+
+Switching to Another Branch
+
+``` default
+git checkout other-branch-name
+```
+
+<br>
+
+Creating a Branch:
+
+``` default
+git branch name-of-new-branch
+```
+
+<br>
+
+### Merging and Merge Conflicts
+
+Rolling Back to an Older Version:
+
+``` default
+## go back one commit
+git reset HEAD^
+
+## go back two commits
+git reset HEAD^^
+
+## go back to a specific commit by providing the SHA number
+git reset SHA-number
+```
+
+<br>
+
+**Merging** (in this example, merging branch `develop` to `main`):
+
+``` default
+git checkout main
+git merge develop
+```
+
+<br>
+
+**Aborting** a Merge (if you cannot resolve a conflict):
+
+``` default
+git merge --abort
+```
+
+<br>
+
+## Getting Started with Git
+
+This section outlines the steps to get Git up, running, and connected to `R Studio`. There are accompanying videos at <https://highamm.github.io/dataviz334/02-software.html#installing-git-and-using-github-class-prep>, which may provide a little more guidance than the written steps below.
+
+#### Pre-requisites
+
+1.  Install both `R` and `R Studio` locally.
+
+2.  Install Git, following <https://happygitwithr.com/install-git.html>. Note that you can get to the Shell within `R Studio` from "Tools -\> Shell..."
+
+    -   Make sure to follow the directions with your associated operating system (likely either Windows or Mac).
+
+    -   After installation, in the Shell, type `git --version` to verify that you get a version number
+
+3.  Create a GitHub account at <https://github.com/> with the "Sign Up" button.
+
+<br>
+
+#### Connect GitHub to `R Studio`
+
+1.  Install the `usethis` package in `R`.
+
+2.  Give Git your credentials with the `use_git_config` function in the `usethis` package: e.g., `usethis::use_git_config(user.name = "Ivan Ramler", user.email = "iramler@stlawu.edu")`.
+
+    -   Note that the email provided must match your GitHub email address.
+
+3.  Generate a Personal Access Token (PAT) with `usethis::create_github_token()`
+
+    -   You can change the recommended scopes if you want but you should at least leave "repo", "user", and "workflow" checked.
+    -   By default, the PAT will expire in 30 days. People have varying levels of comfort with security: I will somewhat shamefully admit that I click the "No Expiration" option.
+
+4.  Install the `gitcreds` package and then, in `R`, run `gitcreds::gitcreds_set()` and paste in your PAT when prompted.
+
+    -   Run `gitcreds::gitcreds_get()` or `usethis::git_sitrep()` to verify that your PAT was accepted.
+
+<br>
+
+#### Create a Repo, Commit, Push, and Pull
+
+1.  On your GitHub account site, click the "`+`" sign in the upper-right corner and select "New Repository."
+
+    -   Give the repository a title and make sure to have the option to create the README file checked.
+
+    -   If your repository will eventually contain data or other code that cannot be made public, you should make select the "Private" option for the repository.
+
+2.  Back in `R Studio`, go to "File -\> New Project", select "Version Control" from the options, and then select "Git". Then, copy and paste the GitHub repository web address, give the folder that will be created a name (giving it the same name as the repository is not required but is something that I find convenient), select where that folder will live on your local computer, and click "Create Project".
+
+    -   If all goes well, you should have a new project with a "Git" pane in the upper-right window. If all does not go well, it may be that `R Studio` cannot locate Git on your local computer and that we need to do a bit of troubleshooting.
+
+<br>
