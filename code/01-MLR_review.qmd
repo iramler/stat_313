@@ -1,0 +1,168 @@
+---
+title: "Multiple Linear Regression Review"
+author: "Stat 313"
+format:
+  html:
+    embed-resources: true
+---
+
+## Getting Started
+
+Load libraries useful for exploring the data.
+
+```{r}
+library(tidyverse) # for most plots(ggplot2), mutate(dplyr), and readr
+library(GGally) # for pairs plot
+```
+
+Read in the Kentucky derby data. Please use a local directory.
+
+```{r}
+derby = read_csv("data/derby.csv")
+```
+
+## Goal:
+
+Our goal today is to model winning speed using characteristics of the race.
+
+1.  Identify each of the following:
+
+```{=html}
+<!-- -->
+```
+a.  *Response Variable*
+
+b.  *Potential Explanatory Variables*
+
+c.  *Identify Potential New Variables to Create*
+
+## Exploratory Analysis
+
+Before we attempt to fit any statistical models, we will graphically explore the data to get a good feel for what predictors might be useful and how.
+
+2.  Construct univariate plots of speed, starters, and condition. Jot down any thoughts you have about these plots.
+
+```{r}
+ggplot(derby, aes(x=speed)) + 
+  geom_histogram(fill="steelblue",color="black")
+
+ggplot(derby,aes(x=starters)) + 
+  geom_histogram(fill="steelblue",color="black")
+
+
+ggplot(derby, aes(x=condition)) + geom_bar(fill="tomato", color="black")
+count(derby,condition)
+```
+
+3.  Construct bivariate plots to explore potential relationships between each **pair** of variables (speed, year, starters, condition). What observations can you make?
+
+```{r}
+ggpairs(derby, columns = c("condition", "year", "starters", "speed"))
+```
+
+4.  Make some new variables using mutate (dplyr package). Specifically, make an indicator variable for "fast" tracks and an indicator variable for "good" condition.
+
+```{r}
+derby = mutate(derby,
+               fast=if_else(condition=="fast",1,0),
+                                                     )
+```
+
+5.  Consider the relationship between speed and year a little more closely.
+
+```{r}
+ggplot(derby, aes( )) + 
+  geom_point() + 
+  geom_smooth(method="loess",se=FALSE)
+
+ggplot(derby, aes( ,color=condition)) +
+  geom_point() + 
+  geom_smooth(method="loess",se=FALSE)
+```
+
+6.  Briefly describe which variables you think look like they will be useful in our model (and how to use them).
+
+## Modeling with Linear Regression
+
+For the purposes of this review, we will not jump right to what we suspect a "best" model will look like, but rather will work up to that best model.
+
+7.  Propose and fit a quadratic regression model (using year) to predict speed.
+
+```{r}
+mod1 = lm(       ,data=derby)
+summary(mod1)
+```
+
+a.  Suppose we had not graphed the data and thus did not notice the curved relationship between year and speed (and that we fit a model using only speed as a predictor). Suppose further we examined residuals plots after fitting the model. What plot would have told us that the relationship between year and speed was curved rather than linear (and what would we have seen in that plot to tell us that)?
+
+b.  Examine residual plots to assess the model assumptions.
+
+```{r}
+plot(mod1,pch=16)
+```
+
+c.  Is there evidence that the model useful? Include all details of the appropriate hypothesis test.
+
+d.  Is there evidence that the quadratic term is useful in the model? Include all details of the appropriate hypothesis test.
+
+e.  Does the fitted intercept of this model have a good interpretation? Why or why not?
+
+```{=html}
+<!-- -->
+```
+8.  Use mutate to create a new variable named yearnew computed as year-1896. Refit the quadratic regression model using yearnew instead. What has changed? What has stayed the same? Does this fitted intercept have a good practical interpretation?
+
+```{r}
+derby = mutate(derby,       )
+```
+
+```{r}
+mod1a = lm(    , data=derby)
+summary(mod1a)
+```
+
+9.  Now let's incorporate track condition in to our model. Propose and fit a new model that adds the fast indicator variable to our previous model.
+
+```{r}
+mod2 = lm(     , data=derby)
+summary(mod2)
+```
+
+a.  What does the fast term do for us?
+
+b.  What if we wanted curves with different features?
+
+c.  What is "wrong" with what we have done? Why does it not sufficiently incorporate track condition?
+
+d.  Now define and fit a model that fixes the problem.
+
+```{r}
+mod2a = lm(           , data=derby)
+summary(mod2a)
+```
+
+e.  Is model better than the previous one? What does it say about the different types of tracks?
+
+f.  Construct and interpret a 95% confidence interval for the population effect of fast tracks.
+
+```{r}
+confint(mod2a)
+```
+
+10. Finally, add the number of starters to the model.
+
+```{r}
+mod3 = lm(    ,data=derby)
+summary(mod3)
+```
+
+a.  How does this model compare to previous models?
+
+b.  Provide an interpretation of the estimated coefficient on the number of starters.
+
+c.  Is there evidence that at least one of the track condition terms improve this model? Address with a single hypothesis test
+
+```{r}
+mod3a = lm(speed ~ yearnew + I(yearnew^2) + starters, data=derby)
+anova(mod3a, mod3) # reduced then full
+```
