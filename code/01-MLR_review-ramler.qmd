@@ -64,18 +64,17 @@ ggpairs(derby, columns = c("condition", "year", "starters", "speed"))
 ```{r}
 derby = mutate(derby,
                fast=if_else(condition=="fast",1,0),
-good=if_else(condition=="good",1,0),
-                                                     )
+               good=if_else(condition=="good",1,0))
 ```
 
 5.  Consider the relationship between speed and year a little more closely.
 
 ```{r}
-ggplot(derby, aes(x = year, y = speed )) + 
+ggplot(derby, aes(x=year,y=speed)) + 
   geom_point() + 
   geom_smooth(method="loess",se=FALSE)
 
-ggplot(derby, aes(x = year, y = speed ,color=condition)) +
+ggplot(derby, aes(x=year,y=speed,color=condition)) + 
   geom_point() + 
   geom_smooth(method="loess",se=FALSE)
 ```
@@ -89,10 +88,7 @@ For the purposes of this review, we will not jump right to what we suspect a "be
 7.  Propose and fit a quadratic regression model (using year) to predict speed.
 
 ```{r}
-mod1 = lm(speed ~ year + I(year^2)    ,data=derby)
-
-# lm(speed ~ poly(year,2) ,data=derby)
-
+mod1 = lm(       ,data=derby)
 summary(mod1)
 ```
 
@@ -106,41 +102,27 @@ plot(mod1,pch=16)
 
 c.  Is there evidence that the model useful? Include all details of the appropriate hypothesis test.
 
-```{r}
-summary(mod1)
-```
-
 d.  Is there evidence that the quadratic term is useful in the model? Include all details of the appropriate hypothesis test.
 
-
-
 e.  Does the fitted intercept of this model have a good interpretation? Why or why not?
-
-```{r}
-coef(mod1)[1]
-```
-
 
 <!-- -->
 
 8.  Use mutate to create a new variable named yearnew computed as year-1896. Refit the quadratic regression model using yearnew instead. What has changed? What has stayed the same? Does this fitted intercept have a good practical interpretation?
 
 ```{r}
-derby = mutate(derby, yearnew = year -  1896)
+derby = mutate(derby,       )
 ```
 
 ```{r}
-mod1a = lm(speed ~ yearnew + I(yearnew^2),
-           data=derby)
+mod1a = lm(    , data=derby)
 summary(mod1a)
 ```
 
 9.  Now let's incorporate track condition in to our model. Propose and fit a new model that adds the fast indicator variable to our previous model.
 
 ```{r}
-mod2 = lm(speed ~ yearnew + I(yearnew^2) + fast
-          # + fast*yearnew + fast*I(yearnew^2)
-            , data=derby)
+mod2 = lm(     , data=derby)
 summary(mod2)
 ```
 
