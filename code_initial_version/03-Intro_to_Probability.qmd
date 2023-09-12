@@ -1,0 +1,66 @@
+---
+title: "Intro to Probability Distributions"
+format: docx
+---
+
+
+
+## Binomial Distribution
+
+Y = # of sixes rolled (out of n=5 die)
+
+Y ~ Binomial(n=5, p=1/6)
+
+dbinom(y, n, p)
+
+```{r}
+
+```
+
+Plot of the binomial distribution
+```{r}
+n = 5
+y = 0:n
+p = 0.25
+
+plot(y,dbinom(y, n, p), type="h", lwd=2, col="steelblue")
+```
+
+
+## Poisson Distribution
+
+Y = # of errors on a slide
+
+Y ~ Poisson(lambda = 0.25)
+
+
+dpois(y, lambda)
+
+```{r}
+
+```
+
+
+Plot of the Poisson distribution
+```{r}
+lambda = 10
+y = 0:30
+
+plot(y,dpois(y, lambda), type="h", lwd=2, col="steelblue")
+```
+
+
+## Example: Free Throws
+
+Y = number of shots made (out of 20)
+
+```{r}
+
+```
+
+## Example: Customer Service
+
+```{r}
+
+```
+
