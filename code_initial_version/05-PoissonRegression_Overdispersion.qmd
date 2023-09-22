@@ -1,0 +1,169 @@
+---
+title: "Dealing with Overdispersion in Poisson Regression"
+format: docx
+---
+
+# Load libraries
+
+```{r}
+library(tidyverse)
+library(MASS) # for negative binomial regression (overdispersion method 2)
+source("code_initial_version/plotPoissonDevRes.R")
+```
+
+# Read in College Crime Data
+
+```{r}
+cdat <- read_csv("data/c_data.csv")
+```
+
+All postsecondary institutions that participate in federal student aid programs are required by the Jeanne Clery Disclosure of Campus Security Policy and Campus Crime Statistics Act and the Higher Education Opportunity Act to collect and report data on crime occurring on campus to the Department of Education. In turn, this data is publicly available on the website of the Office of Postsecondary Education.
+
+Each row of `c_data.csv` contains crime information from a post secondary institution, either a college or university. The variables include:
+
+-   `type` = college (C) or university (U)
+-   `region` = region of the country (C = Central, MW = Midwest, NE = Northeast, SE = Southeast, SW = Southwest, and W = West)
+-   `nv` = the number of violent crimes for that institution for the given year
+-   `Enrollment` = enrollment at the school
+-   `enroll1000` = enrollment at the school, in thousands
+-   `nvrate` = number of violent crimes per 1000 students
+
+We are interested in looking at whether there are regional differences in violent crime on campus, controlling for differences in the type of school.
+
+**Question: Explain why `nv` (the number of violent crimes for a school in a given year) meets our definition of a Poisson random variable.**
+
+## Exploratory Data Analysis
+
+```{r}
+ggplot(cdat, aes(x = nv)) + 
+  geom_histogram(fill = "dodgerblue",
+                 color = "black", bins=12) + 
+  xlab("Number of Violent Crimes")
+
+mean(cdat$nv)
+var(cdat$nv)
+
+```
+
+**Question: Describe the histogram. What does it say about violent crimes on college campuses?**
+
+**Question: Do you have any concerns about comparing counts (of violent crimes) for different colleges/universities? (Hint: You should. Look through the dataset.)**
+
+Now we will look at we examine the violent crime counts in terms of the rate per 1,000 enrolled $\frac{\textrm{number of violent crimes}}{\textrm{number enrolled}} \cdot 1000$.
+
+```{r}
+ggplot(cdat, aes(x = nvrate)) + 
+  geom_histogram(fill="dodgerblue",color="black", bins=12) +
+  xlab("Number of Violent Crimes per 1000 Students")
+
+mean(cdat$nvrate)
+var(cdat$nvrate)
+```
+
+**Question: Why is examining the violent crime rates (per 1,000 enrolled) a more fair comparison?**
+
+```{r}
+sumStats <- cdat %>%
+    group_by(region, type) %>%
+    summarize(MeanCount = mean(nv, na.rm=TRUE),
+              VarCount = var(nv, na.rm=TRUE),
+              MeanRate = mean(nvrate, na.rm=TRUE),
+              VarRate = var(nvrate, na.rm=TRUE),
+              n = n())
+
+sumStats
+
+```
+
+```{r}
+ggplot(cdat, aes(x=region, y=nvrate, fill=type)) + 
+  geom_boxplot() + 
+  xlab("Region") + 
+  ylab("Number of Violent Crimes per 1000 students")
+```
+
+**Question: Looking at the output from the two chunks above, do you have any concerns about the Poisson Regression model assumption?**
+
+**Question: The side-by-side boxplots suggest that there could possibly be an interaction between Region and type. What is it about the boxplots that suggest that? (Hint: a good way to think about interactions is "it depends")**
+
+<!--  Stop here in your prep task for Monday -->
+
+# Poission Regression Model(s)
+
+The authors point out that 1) there is a noticeable outlier for a Southeastern school (5.4 violent crimes per 1000 students), and 2) there is an observed rate of 0 for the Southwestern colleges which can lead to some computational issues. Thus, they propose combining the SW and SE to form a single category of the South and removing the extreme observation from the data set.
+
+```{r}
+# Combining the southern colleges and universities
+cdat <- cdat %>%
+              mutate(region, region = fct_recode(region, "S" = "SW", "S"="SE"))
+
+# Removing Outlier
+cdat <- cdat %>% 
+  filter(nvrate<5)
+
+```
+
+```{r}
+# run again without the outlier and with SW/SE combined
+
+sumStats <- cdat %>%
+    group_by(region, type) %>%
+    summarize(MeanCount = mean(nv, na.rm=TRUE),
+              VarCount = var(nv, na.rm=TRUE),
+              MeanRate = mean(nvrate, na.rm=TRUE),
+              VarRate = var(nvrate, na.rm=TRUE),
+              n = n())
+
+sumStats
+
+mean(cdat$nv)
+var(cdat$nv)
+
+```
+
+```{r}
+ggplot(cdat, aes(x=region, y=nvrate, fill=type)) + geom_boxplot() + xlab("Region") + ylab("Number of Violent Crimes per 1000 students")
+```
+
+##Initial Poisson Regression Model
+
+While it makes sense to explore the data using the rate of violent crimes, Poisson regression requires a count response. Using an **offset** in the Poisson regression model as the same effect.
+
+```{r}
+mod1 = glm(nv ~ type + region + region:type, family = "poisson", data=cdat, offset = log(enroll1000))
+summary(mod1)
+```
+
+##Adjusting for Overdisperion: Method 1
+
+```{r}
+mod2a = glm(nv ~ type + region + region:type, family = "quasipoisson", data=cdat, offset = log(enroll1000))
+summary(mod2a)
+
+```
+
+**Question: How does the output for Model 2 (which adjusts for overdispersion) compare to the output for Model 1? What's the same and what is different?**
+
+**Question: Is there a significant interaction between type and region? Address with a single hypothesis test.**
+
+```{r}
+
+mod2b = glm(nv ~ type + region, family = "quasipoisson", data=cdat, offset = log(enroll1000))
+
+drop.in.dev <- mod2b$deviance - mod2a$deviance
+diff.in.df <- mod2b$df.residual - mod2a$df.residual
+Fstat <- drop.in.dev / summary(mod2a)$dispersion
+Fstat
+1-pf(Fstat, diff.in.df, mod2a$df.residual)
+```
+
+##Adjusting for Overdisperion: Method 2
+
+```{r}
+
+cdat2 <- cdat %>% 
+  mutate(enroll1000 = ifelse(enroll1000 < 1, 1, enroll1000))
+
+mod3 = glm.nb(nv ~ type + region + region:type, data=cdat2, weights = offset(log(enroll1000)),  link = log)
+summary(mod3)
+```
