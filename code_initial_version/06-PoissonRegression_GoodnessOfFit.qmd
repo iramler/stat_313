@@ -1,0 +1,67 @@
+---
+title: "Poisson Regression: Goodness of Fit and Overdispersion"
+format: docx
+---
+
+## Load Libraries
+
+```{r}
+# detach("package:MASS", unload = TRUE)
+
+library(tidyverse)
+source("code_initial_version/plotPoissonDevRes.r")
+```
+
+## Load Philippines Household data
+
+```{r}
+fHH1 <- read_csv("data/fHH1.csv")
+```
+
+## A Potential Concern about our model
+
+```{r}
+
+sumStats <- fHH1 %>% 
+  group_by(age) %>% 
+  summarise(mntotal = mean(total),
+            vartotal = var(total), 
+            logmntotal = log(mntotal),
+            n=n()
+            )
+
+# check mean = variance
+ggplot(sumStats, aes(x=mntotal, y=vartotal)) + 
+  geom_point() +
+  geom_smooth(method = "loess", size = 1.5) + 
+  geom_abline(slope=1, intercept=0,col="red") +
+  xlab("Empirical mean number in the house (by age)") +
+  ylab("Empirical variance in number in the house (by age)") 
+
+```
+
+## Our model so far
+
+```{r}
+mod4 = glm(total ~ age + I(age^2) + location, family="poisson", data=fHH1)
+summary(mod4)
+
+```
+
+## Lack of fit
+
+Is there evidence of lack of fit in our model? Use R or Statkey to obtain the p-value for this hypothesis test. What are possible reasons for model lack of fit?
+
+## Big outliers?
+
+```{r}
+plotPoissonDevRes(mod4)
+```
+
+## Overdispersion?
+
+```{r}
+mod4a = glm(total ~ age + I(age^2) + location, family="quasipoisson", data=fHH1)
+summary(mod4a)
+
+```
