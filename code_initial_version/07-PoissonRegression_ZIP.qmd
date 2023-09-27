@@ -29,10 +29,18 @@ gender.table <- zip.data |>
 gender.table
 
 
+
+off.table <- zip.data |>
+              group_by(off.campus) |>
+              tally() |>
+              mutate(prop = round(n/sum(n),3) )
 off.table
 
 
-
+fy.table <- zip.data |> 
+            group_by(firstYear) |>
+            tally() |>  
+            mutate(prop = round(n/sum(n),3))
 fy.table
 ```
 
@@ -66,7 +74,19 @@ zip.data |>
             var = var(drinks)
   )
 
+zip.data |>
+  group_by(off.campus) |>
+  summarise(n=n(),
+            mean=mean(drinks),
+            var = var(drinks)
+  )
 
+zip.data |>
+  group_by(firstYear,gender) |>
+  summarise(n=n(),
+            mean=mean(drinks),
+            var = var(drinks)
+  )
 
 ```
 
