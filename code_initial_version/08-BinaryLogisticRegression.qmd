@@ -1,0 +1,116 @@
+---
+title: "Binary Logistic Regression"
+format: docx
+---
+
+## Load Libraries
+```{r}
+library(tidyverse)
+```
+
+
+## Read in Data
+```{r}
+movies = read_csv("data/movies90.csv")
+```
+IMDb, run by Amazon, claims to be the largest movie database in the world. In this dataset, there are 2783 that debuted between 1990 and 2005. Relevant variables in the dataset include
+* `Drama` = an indicator variable, 1 if the film is a drama and 0 otherwise
+* `rating` = the movie's rating on IMDb (as of several years ago)
+* `length` = the movie's length (in minutes)
+* `budget` = the movie's budget
+
+In this analysis, we will look for predictors of a movie being a `drama`.
+
+# Exploratory Data Analysis
+
+__Response Variable__
+```{r}
+ggplot(movies, aes(x=Drama)) +
+  geom_bar(fill="wheat3") + 
+  xlab("Drama Indicator (1=yes, 0=no)")
+```
+
+__Explore Rating as a potential Predictor__
+```{r}
+# Explore Rating as a potential Predictor
+sumStats_rating <- movies |>
+  group_by(rating) |>
+  summarise(n = n(),
+            p.est = mean(Drama),
+            emp.odds = p.est/(1-p.est),
+            emp.logit = log(emp.odds))
+
+ggplot(data = sumStats_rating, aes(x=rating, y=emp.logit)) + 
+  geom_point() + 
+  geom_smooth(method="loess") + 
+  geom_hline(yintercept=0, color="red")
+
+```
+
+
+__Explore Length as a potential Predictor__
+```{r}
+# Explore Length as a potential Predictor
+sumStats_length <- movies |>
+  group_by(length) |>
+  summarise(n=n(),
+            p.est = mean(Drama),
+            emp.odds = p.est/(1-p.est),
+            emp.logit = log(emp.odds))
+
+ggplot(data = sumStats_length, aes(x=length, y=emp.logit)) + 
+  geom_point() + 
+  geom_smooth(method="loess") + 
+  geom_hline(yintercept=0, color="red")
+
+```
+
+__Explore Budget as a potential Predictor__
+```{r}
+# Explore Budget as a potential Predictor
+sumStats_budget <- movies |>
+  group_by(budget) |>
+  summarise(n=n(),
+            p.est = mean(Drama),
+            emp.odds = p.est/(1-p.est),
+            emp.logit = log(emp.odds))
+
+ggplot(data = sumStats_budget, aes(x=budget, y=emp.logit)) + 
+  geom_point() + 
+  geom_smooth(method="loess") + 
+  geom_hline(yintercept=0, color="red")
+
+```
+
+# Fit Logistic Regression Models
+
+```{r}
+mod1 = glm(Drama ~ rating, family="binomial", data=movies)
+summary(mod1)
+```
+
+__Model 1 Questions__
+
+1. Is rating a significant predictor? 
+2. Provide an interpretation of the estimated coefficient on rating. 
+3. Construct and interpret a confidence interval for the population coefficient associated with IMDb rating. 
+4. Is there evidence of model lack of fit?
+
+
+
+```{r}
+mod2 = glm(Drama ~ rating + I(rating^2) + length + I(length^2) + budget, family="binomial", data=movies)
+summary(mod2)
+```
+
+__Model 2 Questions__
+
+1. Is there evidence that the model is useful? 
+2. Is there evidence that the terms involving length significantly improve the model? (Address with a single hypothesis test.)
+3. Is there evidence that the quadratic terms significantly improve the model? (Address with a single hypothesis test.) 
+4. Is budget useful in the model? 
+5. Provide an interpretation of the estimated coefficient on budget. 
+6. Is there evidence of model lack of fit?
+
+
+
