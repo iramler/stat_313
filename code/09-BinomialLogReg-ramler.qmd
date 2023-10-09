@@ -1,0 +1,141 @@
+---
+title: "Binomial Logistic Regression"
+format: docx
+---
+
+## Load Libraries
+
+```{r}
+library(tidyverse)
+```
+
+## Load Data
+
+```{r}
+rr <- read_csv(here::here("data/RR_Data_Hale.csv"))
+```
+
+Data from the U.S. Census in 1870 can help researchers understand support for railroads during the Reconstruction Era in U.S. history. Specifically, examining the characteristics of *communities* in Hale County, Alabama can be used to explain support of railroad referenda.
+
+Relevant variables in our dataset include: \* `pctBlack` = the percentage of black residents in the community \* `distance` = the distance, in miles, the proposed railroad is from the community \* `YesVotes` = the number of "Yes" votes in favor of the proposed railroad line (our primary response variable) \* `NumVotes` = the number of votes cast in the election.
+
+**Question:** How is the structure of this dataset different from the structure of the movies dataset? See dataset snippets on the handout.
+
+# Exploratory Data Analysis
+
+```{r}
+rr |>
+  mutate(emp.log = log(YesVotes/NoVotes)) |>
+  ggplot(aes(x=distance,y=emp.log)) + 
+  geom_point() + 
+  geom_smooth(method="loess")
+
+```
+
+**Question:** The above code computes a new variable named `emp.log` (short for empirical logit) and stores it in the dataset. Confirm that the calculation above truly does satisfy our definition of logit (log odds).
+
+**Question:** What does the plot suggest about the relationship between distance and log odds (of favoring the railroad referendum)?
+
+```{r}
+rr |>
+  mutate(emp.log = log(YesVotes/NoVotes)) |>
+  ggplot(aes(x=pctBlack,y=emp.log)) + 
+  geom_point() + 
+  geom_smooth(method="loess")
+
+```
+
+**Question:** What does the plot suggest about the relationship between percentage of black residents and log odds (of favoring the railroad referendum)?
+
+# Fit Logistic Regression Models
+
+```{r}
+mod1 = glm(cbind(YesVotes, NoVotes) ~ distance + pctBlack, 
+           data=rr, family="binomial")
+summary(mod1)
+
+
+# could also use cbind(YesVotes, NumVotes - YesVotes)
+
+```
+
+**Question:** Describe how the code above differs from how we fit a binary logistic regression model.
+
+*Model 1 Questions* 
+
+1. Construct and interpret confidence intervals for the population odds multipliers for each predictor.
+
+```{r}
+confint(mod1) |> exp() |> signif(3)
+```
+Given the percent of black voters, as the distance of the proposed railroad to the community increases by one mile, the predicted odds of voting "Yes" are multiplied by 0.728 to 0.766.
+
+Given the distance of the proposed railroad is held constant, as the percent of black voters increases by one percentage point, the predicted odds of voting "yes" are multiplied by 0.979 to 0.994.
+
+
+2.  Is there evidence of model lack of fit?
+
+```{r}
+summary(mod1)
+# key piece: Residual deviance: 307.22  on  8  degrees of freedom
+# test stat =  307.22
+# df = 8
+# reference distribution = Chi Square with 8 df
+# pval <  0.0000001
+
+pchisq(307.22, df = 8, lower.tail = FALSE)
+
+```
+
+*Try a model with an interaction term to see if that solves the lack of fit problem*
+
+```{r}
+mod2 = glm(cbind(YesVotes, NoVotes) ~ distance + pctBlack + pctBlack:distance, 
+           data=rr, family="binomial")
+summary(mod2)
+```
+
+*Model 2 Questions* 
+
+1. Is the interaction term significant?
+
+2.  Is there evidence of model lack of fit?
+
+*Try the model without Greensboro (outlier) to see if that solves the lack of fit problem*
+
+```{r}
+rr2 = rr |> filter(Voter.Turnout < 50)
+
+mod2noGB = glm(cbind(YesVotes, NoVotes) ~ distance + pctBlack + pctBlack:distance, 
+               data=rr2, family="binomial")
+summary(mod2noGB)
+
+```
+
+*Try a model that adjusts for overdispersion (if overdispersion is present)*
+
+```{r}
+mod3 = glm(cbind(YesVotes, NoVotes) ~ distance + pctBlack + pctBlack:distance, 
+           data=rr, family="quasibinomial")
+summary(mod3)
+
+```
+
+*Model 3 Questions* 
+
+
+1. Should we be concerned about overdispersion?
+
+yes! (Dispersion parameter for quasibinomial family taken to be **51.5967**)
+
+2.  Do the terms involving `pctBlack` improve the model? Address with a single hypothesis test.
+
+
+
+
+
+
+
+
+
+
