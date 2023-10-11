@@ -1,0 +1,257 @@
+---
+title: "Introduction to Poisson Regression"
+format: docx
+---
+
+## Load Libraries
+
+```{r}
+library(tidyverse)
+
+source("code_initial_version/plotPoissonDevRes.R")
+```
+
+## Load Philippines Household data
+
+```{r}
+fHH1 = read_csv("data/fHH1.csv")
+```
+
+## Exploratory Data Analysis
+
+Explore the response variable
+
+```{r}
+ggplot(fHH1, aes(x = total)) + 
+  geom_histogram(binwidth = .25) + 
+  xlab("Number in the house (excluding\nhead of household)") +
+  ylab("Count of households")
+
+mean(fHH1$total)
+var(fHH1$total)
+```
+
+Explore Summary Stats by Roof Material
+
+```{r}
+
+table(fHH1$roof) |> prop.table() |> signif(3)
+
+fHH1  |>
+  group_by(roof)  |>
+  summarise(n = n(),
+            mean = mean(total), 
+            var = var(total)
+            )
+
+```
+
+Explore Summary Stats by location
+
+```{r}
+fHH1  |>
+  group_by(location)  |>
+  summarise(n = n(),
+            mean = mean(total),  
+            var = var(total)
+            )
+```
+
+Explore by age
+
+```{r}
+
+sumStats <- fHH1 |>
+  group_by(age) |> 
+  summarise(n = n(),
+            mntotal = mean(total),
+            vartotal = var(total), 
+            logmntotal = log(mntotal)
+            )
+
+ggplot(sumStats, aes(x = age, y = logmntotal)) +
+  geom_point() +
+  geom_smooth(method = "loess", size = 1.5) +
+  xlab("Age of head of the household") +
+  ylab("Log of the empirical mean number in the house") 
+
+```
+
+Check Mean = Variance assumption
+
+```{r}
+# check mean = variance
+ggplot(sumStats, aes(x = mntotal, y = vartotal)) + 
+  geom_point() +
+  geom_smooth(method = "loess", size = 1.5) + 
+  geom_abline(slope = 1, intercept = 0,
+              col = "tomato", size = 1, linetype = 3) +
+  xlab("Empirical mean number in the house (by age)") +
+  ylab("Empirical variance in number in the house (by age)") 
+
+```
+
+Explore by age and location
+
+```{r}
+sumStats2 <- fHH1 |> 
+  group_by(age, location) |>
+  summarise(n = n(),
+            mntotal = mean(total),
+            vartotal = var(total),
+            logmntotal = log(mntotal)
+            )
+
+ggplot(sumStats2, aes(x = age, y = logmntotal, color = location)) +
+  geom_point()+
+  geom_smooth(method = "loess", se=FALSE)+
+  xlab("Age of head of the household") +
+  ylab("Log empirical mean household size")
+
+```
+
+Explore by Age and Roof Material
+
+```{r}
+sumStats3 <- fHH1 |>
+  group_by(age, roof) |> 
+  summarise(n = n(),
+            mntotal = mean(total),
+            vartotal = var(total),
+            logmntotal = log(mntotal)
+            )
+
+ggplot(sumStats3, aes(x=age, y=logmntotal, color=roof)) +
+  geom_point() +
+  geom_smooth(method = "loess", se=FALSE) +
+  xlab("Age of head of the household") +
+  ylab("Log empirical mean household size") +
+  theme(legend.position = "bottom")
+
+```
+
+## Poisson Regression Models
+
+1.  Propose and fit a Poisson regression model that uses age to predict mean total number in household.
+
+```{r}
+mod1 = glm(total ~ age, family = "poisson", data=fHH1)
+summary(mod1)
+confint(mod1, level = 0.95)
+```
+
+a.  Is there evidence that age is a useful predictor in the model?
+
+```{r}
+# Reminder of where the p-value comes from
+2 * pnorm(-5.026, mean = 0, sd = 1)
+```
+
+b.  Provide an interpretation of the estimated coefficient on age, in context.
+
+c.  Construct and interpret a 95% confidence interval for population coefficient on age.
+
+d.  Explore the poisson regression deviance residuals plot.
+
+```{r}
+plotPoissonDevRes(mod1)
+```
+
+# Prep for Wednesday Task: Finish 2 a - d
+
+2.  Propose and fit a Poisson regression model that uses a quadratic function of age to predict mean total number in household.
+
+```{r}
+mod2 = glm(total ~ age + I(age^2), data=fHH1,
+           family = "poisson")
+summary(mod2)
+
+```
+
+a.  Is there evidence that the quadratic term is useful in the model?
+
+b.  Compute a 95% confidence interval for the relative risk associated with the quadratic term.
+
+```{r}
+confint(mod2) |> exp()
+```
+
+c.  Does the Poisson deviance residuals plot suggest this model has better fit?
+
+```{r}
+plotPoissonDevRes(mod2)
+```
+
+d.  Compare AIC for Model 1 and Model 2? Which model does AIC suggest is better?
+
+```{r}
+AIC(mod1)
+AIC(mod2)
+```
+
+e.  Is there evidence that the overall model is useful?
+
+```{r}
+summary(mod2)
+```
+
+```{r}
+pchisq(161.6, 2, lower.tail = FALSE)
+```
+
+3.  Propose and fit a Poisson regression model that uses a quadratic function of age, as well as location and roof material to predict the mean total number in the household.
+
+```{r}
+table(fHH1$location)
+
+mod3 <- glm(total ~ age + I(age^2) + location + roof, 
+            data = fHH1, family = "poisson")
+summary(mod3)
+```
+
+a.  Is there evidence that the overall model is useful?
+
+```{r}
+pchisq(2362.5 - 2186.6, 1499-1492, lower.tail = FALSE)
+```
+
+b.  Is there evidence that roof material is useful in the model?
+
+```{r}
+summary(mod3)
+```
+
+4.  Propose and fit a Poisson regression model that uses location and a quadratic function of age to predict the mean total number in the household.
+
+```{r}
+mod4 = glm(total ~ age + I(age^2) + location, family="poisson", data=fHH1)
+summary(mod4)
+
+```
+
+a.  Is there evidence that the location terms significantly improve the model? Address this question with a single hypothesis test.
+
+```{r}
+summary(mod2)
+```
+
+```{r}
+pchisq(13.1, 4, lower.tail = FALSE)
+```
+
+```{r}
+anova(mod2,mod4, test="Chisq")
+```
+
+b.  Summarize the findings about difference in the mean total number in the household between the different locations.
+
+```{r}
+fHH1 = mutate(fHH1, locationfac = as.factor(location))
+
+mod4 = glm(total ~ age + I(age^2) + locationfac, family="poisson", data=fHH1)
+
+
+library(multcomp)
+summary( glht(mod4, mcp(locationfac="Tukey")) )
+
+```

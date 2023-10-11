@@ -1,0 +1,79 @@
+---
+title: "Intro to Probability Distributions"
+format: docx
+---
+
+## Binomial Distribution
+
+Y = \# of sixes rolled (out of n=5 die)
+
+Y \~ Binomial(n=5, p=1/6)
+
+dbinom(y, n, p) - function to evaluate the pdf of the binomial distribution
+
+```{r}
+# find the probability of getting exactly 1 six in 5 rolls of the die
+dbinom(1, 5, 1/6)
+
+# bernoulli trial
+dbinom(1, 1, 1/6)
+
+# find the probability of getting 3 or more sixes in 5 dice rolls
+dbinom(3:5, 5, 1/6) |> sum() # using pipes
+
+sum( dbinom(3:5, 5, 1/6) ) # nested functions
+
+```
+
+Plot of the binomial distribution
+
+```{r}
+n = 500
+y = 0:n
+p = 0.95
+
+plot(y,dbinom(y, n, p), type="h", lwd=2, col="steelblue")
+```
+
+## Poisson Distribution
+
+Y = \# of errors on a slide
+
+Y \~ Poisson(lambda = 0.25)
+
+dpois(y, lambda)
+
+```{r}
+# probability of exactly one error on the "next slide"
+dpois(1, 0.25)
+
+# between 4 and 12 errors (inclusive)?
+dpois(4:12, 0.25) |> sum()
+
+
+# at least one error?
+1 - dpois(0, 0.25)
+```
+
+Plot of the Poisson distribution
+
+```{r}
+lambda = 2
+y = 0:30
+
+plot(y,dpois(y, lambda), type="h", lwd=2, col="steelblue")
+```
+
+## Example: Free Throws
+
+Y = number of shots made (out of 20)
+
+```{r}
+
+```
+
+## Example: Customer Service
+
+```{r}
+
+```

@@ -1,0 +1,178 @@
+---
+title: "Case Study: Weekend Drinking (An Intro to ZIP Models)"
+format: docx
+---
+
+## Load Libraries
+
+```{r}
+library(tidyverse)
+library(pscl) # functions for zero inflated Poisson models
+```
+
+## Read in Data
+
+An informal survey of students in an introductory statistics course included the question, "How many alcoholic drinks did you consume last weekend?". This survey was conducted on a dry campus where no alcohol is officially allowed, even among students of drinking age.
+
+```{r}
+zip.data = read.csv("data/weekendDrinks.csv") |> rename(gender = sex)
+```
+
+Each line of `weekendDrinks.csv` contains data provided by a student in an introductory statistics course. In this analysis, the response of interest is the respondent's report of the number of alcoholic `drinks` they consumed the previous weekend, whether the student lives `off.campus`, and `gender` (labeled `sex` in the data file). We will also consider if a student is a `firstYear` student.
+
+## Exploratory Data Analysis
+
+**Task: Modify the code for "gender.table" to make similar tables summarizing `off.campus` and `firstYear`.**
+
+```{r}
+gender.table <- zip.data |>
+              group_by(gender) |>
+              tally() |>
+              mutate(prop = round(n/sum(n),3) )
+gender.table
+
+
+
+off.table <- zip.data |>
+              group_by(off.campus) |>
+              tally() |>
+              mutate(prop = round(n/sum(n),3) )
+off.table
+
+
+fy.table <- zip.data |> 
+            group_by(firstYear) |>
+            tally() |>  
+            mutate(prop = round(n/sum(n),3))
+fy.table
+```
+
+This is a histogram of our response variable of interest (number of drinks)
+
+```{r}
+ggplot(zip.data, aes(x=drinks)) + 
+  geom_histogram(fill="hotpink3", color="black", bins=15) + 
+  xlab('Number of Drinks "Last" Weekend') 
+
+```
+
+This is a histogram of data from a Poisson distribution with the same mean as the response variable from our dataset (and has the same number of observations as our dataset).
+
+```{r}
+set.seed(925203)
+pdat = data.frame(fish=rpois(77, mean(zip.data$drinks)))  # notice the lame joke here?
+ggplot(pdat, aes(x=fish))+
+  geom_histogram(fill="thistle4", color="black", bins=15)
+```
+
+**Task: Compare and contrast these two histograms. How are they similar? How are they different?**
+
+**Task: Come up with at least two reasons why a student might have had 0 drinks "last" weekend.**
+
+**Task: Modify the code for gender to create similar code for off.campus and firstYear.**
+
+```{r}
+zip.data |>
+  group_by(gender) |>
+  summarise(n=n(),
+            mean=mean(drinks),
+            var = var(drinks)
+  )
+
+zip.data |>
+  group_by(off.campus) |>
+  summarise(n=n(),
+            mean=mean(drinks),
+            var = var(drinks)
+  )
+
+zip.data |>
+  group_by(firstYear,gender) |>
+  summarise(n=n(),
+            mean=mean(drinks),
+            var = var(drinks)
+  )
+
+```
+
+**Task: What do the means and variances in the above summaries suggest about the Poisson regression mean = variance assumption?**
+
+```{r}
+ggplot(zip.data, aes(x=gender, y=drinks, fill=as.factor(off.campus))) + geom_boxplot() + ylab('Number of drinks "last" weekend')
+
+ggplot(zip.data, aes(x=gender, y=drinks, fill=firstYear)) + geom_boxplot() + ylab('Number of drinks "last" weekend')
+
+ggplot(zip.data, aes(x=firstYear, y=drinks, fill=as.factor(off.campus))) + geom_boxplot() + ylab('Number of drinks "last" weekend')
+```
+
+# Stop here in prep for Wednesday's task
+
+## Poisson Regression Model
+
+```{r}
+PRmod = glm(drinks ~ gender + off.campus, data=zip.data, family="poisson")
+summary(PRmod)
+exp(coef(PRmod))
+```
+
+**Provide interpretations of the estimated coefficients in the Poisson Regression model.**
+
+## Zero-Inflated Poisson Regression Model
+
+```{r}
+ZIPmod = zeroinfl(drinks ~ gender + off.campus | firstYear,    # pscl package
+         data = zip.data,
+         dist = "poisson")
+
+summary(ZIPmod)
+exp(coef(ZIPmod))
+```
+
+**Provide interpretations of the estimated coefficients in the Poisson Regression portion of the ZIP model.**
+
+**Predict the probability that a first-year student is a non-drinker. Predict the probability that a non-first year student is a non-drinker.**
+
+$\eta$
+
+## Comparing ZIP and Ordinary Poisson Regression
+
+```{r}
+vuong(PRmod, ZIPmod)
+```
+
+Vuong test indicates that the ZIP model is a better fit for these data than a regular Poisson regression model. (as indicated by the small p-values)
+
+
+## Tweak Zip model to use gender and off.campus as predictors of non-drinker status
+
+```{r}
+ZIPmod2 = zeroinfl(drinks ~ gender + off.campus | gender + off.campus,    # pscl package
+         data = zip.data,
+         dist = "poisson")
+
+summary(ZIPmod2)
+```
+## Tweak Zip model to not use any predictors of non-drinker status
+
+"Intercept only model" for the zero-inflation
+
+```{r}
+ZIPmod3 = zeroinfl(drinks ~ gender + off.campus | 1 ,    # pscl package
+         data = zip.data,
+         dist = "poisson")
+
+summary(ZIPmod3)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
