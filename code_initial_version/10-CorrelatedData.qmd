@@ -1,0 +1,175 @@
+---
+title: "Exploring Correlated Data"
+format: docx
+---
+
+Chunk 1
+```{r}
+library(tidyverse)
+```
+
+## Why do we worry about correlated data (intraclass correlation)?
+
+We will revisit the dams and pups example from the Correlated Data introduction and simulate (make up our own) data from an experiment designed to compare the effects of a teratogen at different doses. We will consider several different scenarios.
+
+__Scenario 1__
+We will ignore dose and assume, for the moment, that it has no effect on the number of pups with birth defects that each dam produced.
+
+**Scenario 1a:** Every dam has the same probability (50%) of a deformed pup (and that probability is the same for every pup produced by the dam).
+
+**Scenario 1b:** Each dam has their own inherent probability of a deformed pup (and that probability is the same for every pup produced by the dam).
+
+Chunk 2
+```{r}
+set.seed(964312)
+
+#1a: All 24 dams have 50% chance that an individual pup has a defect
+pi_1a <- rep(0.5, 24) 
+count_1a <- rbinom(24, 10, pi_1a) # simulate # of deformed pups in each litter (24 litters of 10 pups)
+
+#1b: Each dam has its own chance (p) that an individual pup has a defect
+pi_1b <- round(rbeta(24,.5,.5),3)  
+count_1b <- rbinom(24, 10, pi_1b) # simulate # of deformed pups in each litter (24 litters of 10 pups)
+
+# Combine all simulated data into one dataframe
+scenario_1 <- data.frame(pi_1a, count_1a, pi_1b, count_1b)
+```
+
+### Questions
+
+1.  Compare and contrast the probabilities (of deformed pups) for Scenario 1a and Scenario 1b.
+
+2.	Why does Scenario 1b contain correlated data that we must account for, while Scenario 1a does not?
+
+3.	Is Scenario 1b realistic?  Why might some dams have higher probabilities than others?
+
+Chunk 3
+```{r}
+ ggplot(data = scenario_1, aes(x = count_1a)) + 
+  geom_histogram(bins = 5,fill="steelblue",color="black") + coord_cartesian(xlim = c(0, 10)) +
+  labs(title = "Scenario 1a: Binomial, p = 0.5",
+       x = "Count of deformed pups per dam")
+
+
+ggplot(data = scenario_1, aes(x = count_1b)) + 
+  geom_histogram(bins = 5,fill="steelblue",color="black") + coord_cartesian(xlim = c(0, 10)) +
+  labs(title = "Scenario 1b: Binomial, random p",
+       x = "Count of deformed pups per dam")
+
+```
+
+**Questions**
+
+4.  Do the counts of deformed pups for dams in Scenario 1a reasonably behave like a binomial distribution with n = 10 and p = 0.5 (that is, like counting heads in 10 flips of a fair coin)?  Why or why not? 
+
+5.  Do the counts of deformed pups for dams in Scenario 1b reasonably behave like a binomial distribution with n = 10 and p = 0.5 (that is, like counting heads in 10 flips of a fair coin)?  Why or why not? 
+
+
+Chunk 4
+```{r}
+# Logistic regression model for scenario 1a
+fit_1a_binom <- glm(cbind(count_1a, 10-count_1a) ~ 1, family=binomial, data = scenario_1)
+summary(fit_1a_binom) 
+```
+
+Chunk 5
+```{r}
+# Logistic regression model for scenario 1b
+fit_1b_binom <- glm(cbind(count_1b, 10-count_1b) ~ 1, family=binomial, data = scenario_1)
+summary(fit_1b_binom) 
+```
+
+Chunk 6
+```{r}
+# Logistic regression model that adjusts for possible overdispersion in scenario 1a
+fit_1a_qbinom <- glm(cbind(count_1a, 10-count_1a) ~ 1, family=quasibinomial, data = scenario_1)
+summary(fit_1a_qbinom) 
+```
+
+
+Chunk 7
+```{r}
+# Logistic regression model that adjusts for possible overdispersion in scenario 1b
+fit_1b_qbinom <- glm(cbind(count_1b, 10-count_1b) ~ 1, family=quasibinomial, data = scenario_1)
+summary(fit_1b_qbinom) 
+```
+
+__Insert summary table here__
+
+**Questions**
+
+6.	Describe how the quasibinomial analysis of Scenario 1b differs from the binomial analysis of the same simulated data.
+7.	Why are differences between quasibinomial and binomial models of Scenario 1a less noticeable than the differences in Scenario 1b?
+
+
+__Scenario 2__ 
+Now we will allow for a dose effect. In this hypothetical experiment we will have 24 total dams evenly split into four groups receiving either no dose (coded as dose = 0 mg), a low dose (dose = 1), a medium dose (dose = 2), or a high dose (dose = 3) of the teratogen. We will assume that as dosage increases, so does the log odds of a deformed pup (we’ll use the same “model” as described in the textbook).
+
+**Scenario 2a:** All dams receiving the same dosage of the teratogen have the same probability of a deformed pup (and that probability is the same for every pup produced by the dam).
+
+**Scenario 2b:** The probability of a deformed pup for each dam differs from the overall defect probability for the dose they received by their own random amount (and that probability is the same for every pup produced by the dam).
+
+
+Chunk 8
+```{r}
+set.seed(12345)
+
+dose <- c(rep(0,6),rep(1,6),rep(2,6),rep(3,6))
+
+# "true" probability of defect for each dosage
+pi_2a <- exp(-2+4/3*dose)/(1+exp(-2+4/3*dose))
+# The probability of a deformed pup will be the same for all dams receiving the same dosage
+count_2a <- rbinom(24, 10, pi_2a)
+
+b <- 1/2
+a <- b*pi_2a / (1-pi_2a)
+pi_2b <- rbeta(24, a, b)
+count_2b <- rbinom(24, 10, pi_2b)  
+
+scenario_2 <- data.frame(dose, pi_2a, count_2a, pi_2b, count_2b)
+```
+
+__Questions__
+
+8.  Compare/contrast the probabilities for Scenario 2a and Scenario 2b.
+
+9.  Why does Scenario 2b contain correlated data that we must account for, while Scenario 2a does not?
+
+Chunk 9
+```{r}
+# Logistic regression model for scenario 2a
+fit_2a_binom = glm(cbind(count_2a, 10-count_2a) ~ dose, family=binomial,  data=scenario_2)
+summary(fit_2a_binom)
+```
+
+Chunk 10
+```{r}
+# Logistic regression model for scenario 2b
+fit_2b_binom = glm(cbind(count_2b, 10-count_2b) ~ dose, family=binomial,  data=scenario_2)
+summary(fit_2b_binom)
+```
+
+Chunk 11
+```{r}
+# Logistic regression model that adjusts for possible overdispersion in scenario 2a
+fit_2a_qbinom = glm(cbind(count_2a, 10-count_2a) ~ dose, family=quasibinomial,  data=scenario_2)
+summary(fit_2a_qbinom)
+```
+
+Chunk 12
+```{r}
+# Logistic regression model that adjusts for possible overdispersion in scenario 2b
+fit_2b_qbinom = glm(cbind(count_2b, 10-count_2b) ~ dose, family=quasibinomial,  data=scenario_2)
+summary(fit_2b_qbinom)
+```
+
+__Insert summary table here__
+
+**Questions**
+
+10.	Describe how the quasibinomial analysis of Scenario 2b differs from the binomial analysis of the same simulated data.
+
+11.	Why are differences between quasibinomial and binomial models of Scenario 2a less noticeable than the differences in Scenario 2b?
+
+12.	Conclusion: Based on what you have seen here, why do you think we would want to account for correlated data in our models? 
+

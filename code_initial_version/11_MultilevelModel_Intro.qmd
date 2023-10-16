@@ -1,0 +1,111 @@
+---
+title: "Introduction to Multilevel Models"
+format: docx
+---
+
+
+## Load Libraries
+```{r}
+library(tidyverse)
+library(lme4) # for fitting multilevel models
+```
+
+## Load Data
+```{r}
+musicdata = read_csv("data/musicdata.csv")
+```
+
+## Understand the structure of the music dataset
+* Identify response variable
+* Identify Level One observational units
+* Identify Level Two observational units
+* Identify Level One covariates
+* Identify Level Two covariates
+
+
+## Exploratory Data Analysis
+```{r}
+ggplot(musicdata,aes(x=previous,y=na)) + 
+  geom_point() + 
+  geom_smooth(method="loess") + 
+  xlab("# of Previous Performances") + 
+  ylab("na (Negative Affect)")
+```
+
+```{r}
+ggplot(musicdata,aes(x=previous,y=na)) + 
+  geom_point() + 
+  geom_smooth(method="lm",se=FALSE) +  # or loess?? 
+  facet_wrap( ~id) +
+  xlab("# of Previous Performances") + 
+  ylab("na (Negative Affect)")
+```
+
+Describe the relationship between number of previous performances and negative affect for Musicians 1, 27, 38, and 40.
+
+
+
+# Multilevel Models
+
+## Random Intercept model
+
+
+### Write out the multilevel model
+
+-   Level One: $Y_{ij} = a_{i}+\epsilon_{ij}$ where $\epsilon_{ij}\sim N(0,\sigma^2)$
+
+-   Level Two: $a_{i} = \alpha_{0}+u_{i}$ where $u_{i}\sim N(0,\sigma_{u}^{2})$
+
+-   $Y_{ij}$ is the Performance anxiety scores of subject $i$ for performance $j$.
+
+-   $a_{i}$ is the true mean response of all observations for subject $i$.
+
+-   $\alpha_{0}$ is the grand mean -- the true mean of all observations across the entire population.
+
+-   $\sigma^2$ is the within-person variability
+
+-   $\sigma_{u}^{2}$ is the between-person variability
+
+Can combine all of these into a composite model: 
+
+
+
+
+The name **random intercepts model** then arises from the Level Two equation for $a_{i}$: each subject's intercept is assumed to be a random value from a normal distribution centered at $\alpha_{0}$ with variance $\sigma_{u}^{2}$.
+
+
+
+### Fit the model
+
+```{r, comment=NA}
+#Model A (Unconditional means model)
+model.a <- lmer(na ~ 1 + (1 | id), REML = T, data = musicdata)
+summary(model.a)
+```
+
+### Interpret multilevel model
+
+
+
+
+## Multilevel model with convariates
+
+### Write out the multilevel model
+
+-   $\hat{\alpha}_{0}=$
+
+-   $\hat{\sigma}^2=$
+
+-   $\hat{\sigma}_{u}^{2}=$
+
+
+### Fit the model
+
+```{r}
+mlmod1 = lmer(na ~ previous + (previous|id), REML=T, data=musicdata)
+summary(mlmod1)
+```
+
+## Interpret multilevel model
+
+
