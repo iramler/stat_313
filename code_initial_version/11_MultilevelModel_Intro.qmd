@@ -3,27 +3,29 @@ title: "Introduction to Multilevel Models"
 format: docx
 ---
 
-
 ## Load Libraries
+
 ```{r}
 library(tidyverse)
 library(lme4) # for fitting multilevel models
 ```
 
 ## Load Data
+
 ```{r}
 musicdata = read_csv("data/musicdata.csv")
 ```
 
 ## Understand the structure of the music dataset
-* Identify response variable
-* Identify Level One observational units
-* Identify Level Two observational units
-* Identify Level One covariates
-* Identify Level Two covariates
 
+-   Identify response variable
+-   Identify Level One observational units
+-   Identify Level Two observational units
+-   Identify Level One covariates
+-   Identify Level Two covariates
 
 ## Exploratory Data Analysis
+
 ```{r}
 ggplot(musicdata,aes(x=previous,y=na)) + 
   geom_point() + 
@@ -43,12 +45,9 @@ ggplot(musicdata,aes(x=previous,y=na)) +
 
 Describe the relationship between number of previous performances and negative affect for Musicians 1, 27, 38, and 40.
 
-
-
 # Multilevel Models
 
 ## Random Intercept model
-
 
 ### Write out the multilevel model
 
@@ -66,14 +65,9 @@ Describe the relationship between number of previous performances and negative a
 
 -   $\sigma_{u}^{2}$ is the between-person variability
 
-Can combine all of these into a composite model: 
-
-
-
+Can combine all of these into a composite model:
 
 The name **random intercepts model** then arises from the Level Two equation for $a_{i}$: each subject's intercept is assumed to be a random value from a normal distribution centered at $\alpha_{0}$ with variance $\sigma_{u}^{2}$.
-
-
 
 ### Fit the model
 
@@ -85,10 +79,7 @@ summary(model.a)
 
 ### Interpret multilevel model
 
-
-
-
-## Multilevel model with convariates
+## Multilevel model with covariates
 
 ### Write out the multilevel model
 
@@ -98,7 +89,6 @@ summary(model.a)
 
 -   $\hat{\sigma}_{u}^{2}=$
 
-
 ### Fit the model
 
 ```{r}
@@ -107,5 +97,3 @@ summary(mlmod1)
 ```
 
 ## Interpret multilevel model
-
-
