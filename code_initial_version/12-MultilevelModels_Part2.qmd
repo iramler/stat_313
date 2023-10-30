@@ -1,0 +1,185 @@
+---
+title: "Multilevel Models, Part 2"
+format: docx
+---
+
+## Load Libraries
+```{r}
+library(tidyverse)
+library(lme4) # for fitting multilevel models
+```
+
+
+## Load Data
+```{r}
+musicdata = read_csv("data/musicdata.csv")
+```
+
+## Our Current Model
+```{r}
+mlmod1 = lmer(na ~ previous + (previous|id), REML=T, data=musicdata)
+summary(mlmod1)
+```
+
+## Why might musicians have different intercepts/slopes? 
+
+If we want to try to explain why different musicians have different intercepts and slopes, we might try to use a Level Two covariate (predictors whose values are recorded on musicians, rather than performances.) 
+
+### Exploratory Data Analysis
+Note that values of a Level Two covariate would be repeated for each performance by a musician. This means there is no perfect way to approach the exploratory data analysis. Our options: Use every data point for a musician or summarize the data for a musician.
+
+__Numerical Predictors (at Level Two)__
+
+_Using Every Data Point for  Musician_
+
+Explore the possible numerical predictors.
+```{r}
+ggplot(data=musicdata,aes(x=mpqpem,y=na)) + 
+  geom_point() + 
+  geom_smooth(method="lm",color="black") + 
+  ylab("Negative Affect") + 
+  xlab("PEM") 
+
+ggplot(data=musicdata,aes(x=mpqnem,y=na)) + 
+  geom_point() + 
+  geom_smooth(method="lm",color="black") + 
+  ylab("Negative Affect") + 
+  xlab("NEM") 
+
+ggplot(data=musicdata,aes(x=mpqab,y=na)) + 
+  geom_point() + 
+  geom_smooth(method="lm",color="black") + 
+  ylab("Negative Affect") + 
+  xlab("Absorption") 
+```
+
+
+_Summarizing the Data for a Musician_
+
+Need to reduce the data down to one observation per musician. We will use mean negative affect.
+```{r}
+music.lev2 <-  musicdata %>%
+  group_by(id) %>%
+  filter(row_number() == 1) %>%
+  select(id, gender:mpqnem)
+
+meanbysubj <- musicdata %>% group_by(id) %>%
+  summarise(meanbysubj = mean(na, na.rm = TRUE))
+music.lev2 <- music.lev2 %>%
+  left_join(meanbysubj, by = "id")
+
+```
+
+Now explore the possible numerical predictors.
+```{r}
+ggplot(data=music.lev2,aes(x=mpqpem,y=meanbysubj)) + 
+  geom_point() + 
+  geom_smooth(method="lm",color="black") + 
+  ylab("Mean Negative Affect") + 
+  xlab("PEM") 
+
+ggplot(data=music.lev2,aes(x=mpqnem,y=meanbysubj)) + 
+  geom_point() + 
+  geom_smooth(method="lm",color="black") + 
+  ylab("Mean Negative Affect") + 
+  xlab("NEM") 
+
+ggplot(data=music.lev2,aes(x=mpqab,y=meanbysubj)) + 
+  geom_point() + 
+  geom_smooth(method="lm",color="black") +
+  ylab("Mean Negative Affect") + 
+  xlab("Absorption") 
+```
+
+
+__Categorical Predictors (at Level Two)__
+
+_Using Every Data Point for  Musician_
+
+Explore the possible categorical predictors.
+
+```{r}
+ggplot(data=musicdata,aes(x=gender,y=na)) + 
+  geom_boxplot(fill="mediumseagreen") + 
+  ylab("Negative Affect") + 
+  xlab("Gender") 
+
+ggplot(data=musicdata,aes(x=instrument,y=na)) + 
+  geom_boxplot(fill="mediumseagreen") + 
+  ylab("Negative Affect") + 
+  xlab("Instrument") 
+
+```
+
+
+_Summarizing the Data for a Musician_
+Using mean negative affect for each musician, explore the possible categorical predictors.
+```{r}
+ggplot(data=music.lev2,aes(x=gender,y=meanbysubj)) + 
+  geom_boxplot(fill="mediumseagreen") + 
+  ylab("Negative Affect") + 
+  xlab("Gender") 
+
+ggplot(data=music.lev2,aes(x=instrument,y=meanbysubj)) + 
+  geom_boxplot(fill="mediumseagreen") + 
+  ylab("Negative Affect") + 
+  xlab("Instrument") 
+```
+
+## Fitting Models with Level Two Covariates
+
+__Using a Numerical Level Two Covariate__
+
+First, use a musician's negative emotionality score to "explain" differences in intercepts (baseline negative affect).
+```{r}
+mlmod2a = lmer(na ~ mpqnem + previous +  (previous | id), data=musicdata, REML=T)
+
+summary(mlmod2a)
+```
+
+Now, use a musician's negative emotionality score to "explain" differences in both intercepts and slopes.
+```{r}
+mlmod2b = lmer(na ~ mpqnem + previous + mpqnem:previous + (previous | id), data=musicdata, REML=T)
+
+summary(mlmod2b)
+```
+
+
+Center the numerical predictor to improve (make easier!) the interpretations
+```{r}
+musicdata = mutate(musicdata, cmpqnem = mpqnem-mean(mpqnem))
+```
+
+```{r}
+mlmod2a.2 = lmer(na ~ cmpqnem + previous +  (previous | id), data=musicdata, REML=T)
+
+summary(mlmod2a.2)
+
+mlmod2b.2 = lmer(na ~ cmpqnem + previous + cmpqnem:previous + (previous | id), data=musicdata, REML=T)
+
+summary(mlmod2b.2)
+```
+
+
+__Using a Categorical Level Two Covariate__
+```{r}
+# add indicator variables for two of the three instrument catgories
+musicdata = musicdata %>% 
+  mutate(vocal = ifelse(instrument=="voice", 1, 0),
+         orch = ifelse(instrument=="orchestral instrument", 1, 0))
+```
+
+First, use a musician's instrument to "explain" differences in intercepts (baseline negative affect).
+```{r}
+mlmod3a = lmer(na ~ previous + vocal + orch  + (previous | id), data=musicdata, REML=T)
+
+summary(mlmod3a)
+```
+
+
+Now, use a musician's instrument to "explain" differences in intercepts and slopes.
+```{r}
+mlmod3b = lmer(na ~ previous + vocal + orch + previous:vocal + previous:orch + (previous | id), data=musicdata, REML=T)
+
+summary(mlmod3b)
+```
