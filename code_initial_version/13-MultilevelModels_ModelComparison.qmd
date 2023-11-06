@@ -1,0 +1,62 @@
+---
+title: 'Multilevel Models: Comparing Models with AIC, BIC, and Likelihood Ratio Tests'
+format: docx
+---
+
+## Load Libraries
+```{r}
+library(tidyverse)
+library(lme4)
+```
+
+## Read Data
+```{r}
+musicdata = read_csv("data/musicdata.csv")
+
+
+musicdata = mutate(musicdata, cmpqnem = mpqnem-mean(mpqnem)) # center NEM covariate
+# add indicator variables for two of the three instrument categories
+musicdata = musicdata %>% 
+  mutate(vocal = ifelse(instrument=="voice", 1, 0),
+         orch = ifelse(instrument=="orchestral instrument", 1, 0))
+```
+
+
+## Summarize Models from class
+
+Model 1: Previous Performances at Level One; No predictors at Level Two
+
+```{r}
+mlmod1 = lmer(na ~ previous + (previous|id), REML=F, data=musicdata)
+summary(mlmod1)
+```
+
+
+Model 2a: Previous Performances at Level One; (centered) NEM to explain different intercepts at Level Two
+```{r}
+mlmod2a.2 = lmer(na ~ cmpqnem + previous +  (previous | id), data=musicdata, REML=F)
+
+summary(mlmod2a.2)
+```
+
+Model 2b: Previous Performances at Level One; (centered) NEM to explain different intercepts and different slopes at Level Two
+```{r}
+mlmod2b.2 = lmer(na ~ cmpqnem + previous + cmpqnem:previous + (previous | id), data=musicdata, REML=F)
+
+summary(mlmod2b.2)
+```
+
+Model 3a: # Previous Performances at Level One; Instrument to explain different intercepts at Level Two
+```{r}
+mlmod3a = lmer(na ~ previous + vocal + orch  + (previous | id), data=musicdata, REML=F)
+
+summary(mlmod3a)
+```
+
+
+
+```{r}
+anova(mlmod1, mlmod2b.2, test="chisq")
+```
+
+
