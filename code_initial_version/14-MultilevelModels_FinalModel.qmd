@@ -1,0 +1,308 @@
+---
+title: "More Multilevel Modeling"
+format: docx
+---
+
+## Load Libraries
+
+```{r}
+library(tidyverse)
+library(lme4) # for fitting multilevel models
+```
+
+## Load Data
+
+```{r}
+musicdata = read_csv("data/musicdata.csv")
+```
+
+## Primary Research Questions
+
++ Lower music performance anxiety will be associated with lower levels of a subject's negative emotionality. 
+
++ Lower music performance anxiety will be associated with lower levels of a subject's stress reaction. 
+
++ Lower music performance anxiety will be associated with greater number of years of study.
+
+## Exploratory Analysis
+
+```{r}
+prop.table(table(musicdata$audience))
+prop.table(table(musicdata$perform_type))
+```
+
+**Level One Covariates**
+
+```{r}
+ggplot(musicdata, aes(x=previous,y=na)) + 
+  geom_point() + 
+  geom_smooth(method="lm") +
+  xlab("# of Previous Performances") + 
+  ylab("Negative Affect")+
+  facet_wrap("id")
+
+ggplot(musicdata, aes(x=previous,y=na)) + 
+  geom_point() + 
+  geom_smooth(method="lm") +
+  xlab("# of Previous Performances") + 
+  ylab("Negative Affect")
+```
+
+```{r}
+ggplot(musicdata, aes(x=perform_type,y=na)) + 
+  geom_boxplot(fill="steelblue") +
+  xlab("Performance Type") + 
+  ylab("Negative Affect")+
+  scale_x_discrete(label=abbreviate) + 
+  facet_wrap("id")
+
+ggplot(musicdata, aes(x=perform_type,y=na)) + 
+  geom_boxplot(fill="steelblue") +
+  xlab("Performance Type") + 
+  ylab("Negative Affect")+
+  scale_x_discrete(label=abbreviate)
+```
+
+```{r}
+ggplot(musicdata, aes(x=memory,y=na)) + 
+  geom_boxplot(fill="steelblue") +
+  xlab("Memory") + 
+  ylab("Negative Affect")+
+  scale_x_discrete(label=abbreviate) + 
+  facet_wrap("id")
+```
+
+```{r}
+ggplot(musicdata, aes(x=audience,y=na)) + 
+  geom_boxplot(fill="steelblue") +
+  xlab("audience") + 
+  ylab("Negative Affect")+
+  scale_x_discrete(label=abbreviate) + 
+  facet_wrap("id")
+
+ggplot(musicdata, aes(x=audience,y=na)) + 
+  geom_boxplot(fill="steelblue") +
+  xlab("audience") + 
+  ylab("Negative Affect")+
+  scale_x_discrete(label=abbreviate)
+```
+
+**Level Two Covariates**
+
+```{r}
+music.lev2 <-  musicdata %>%
+  group_by(id) %>%
+  filter(row_number() == 1) %>%
+  select(id, gender:mpqnem)
+
+meanbysubj <- musicdata %>% group_by(id) %>%
+  summarise(meanbysubj = mean(na, na.rm = TRUE))
+music.lev2 <- music.lev2 %>%
+  left_join(meanbysubj, by = "id")
+```
+
+```{r}
+ggplot(data=musicdata,aes(x=years_study,y=na)) + 
+  geom_point() + 
+  geom_smooth(method="lm",color="black") + 
+  ylab("Negative Affect") + 
+  xlab("Years of Study")
+
+ggplot(data=music.lev2,aes(x=years_study,y=meanbysubj)) + 
+  geom_point() + 
+  geom_smooth(method="lm",color="black") +
+  ylab("Mean Negative Affect") + 
+  xlab("Years of Study") 
+
+
+ggplot(data=musicdata,aes(x=years_study,y=na,color=audience)) + 
+  geom_point() + 
+  geom_smooth(method="lm") + 
+  ylab("Negative Affect") + 
+  xlab("Years of Study")+ 
+  theme(legend.position = "bottom")
+
+ggplot(data=musicdata,aes(x=years_study,y=na,color=perform_type)) + 
+  geom_point() + 
+  geom_smooth(method="lm") + 
+  ylab("Negative Affect") + 
+  xlab("Years of Study")+ 
+  theme(legend.position = "bottom")
+```
+
+```{r}
+ggplot(data=musicdata,aes(x=mpqsr,y=na)) + 
+  geom_point() + 
+  geom_smooth(method="lm",color="black") + 
+  ylab("Negative Affect") + 
+  xlab("MPQ Stress Response")
+
+ggplot(data=music.lev2,aes(x=mpqsr,y=meanbysubj)) + 
+  geom_point() + 
+  geom_smooth(method="lm",color="black") +
+  ylab("Negative Affect") + 
+  xlab("MPQ Stress Response") 
+
+ggplot(data=musicdata,aes(x=mpqsr,y=na,color=audience)) + 
+  geom_point() + 
+  geom_smooth(method="lm") + 
+  ylab("Negative Affect") + 
+  xlab("MPQ Stress Response")+ 
+  theme(legend.position = "bottom")
+
+ggplot(data=musicdata,aes(x=mpqsr,y=na, color=perform_type)) + 
+  geom_point() + 
+  geom_smooth(method="lm") + 
+  ylab("Negative Affect") + 
+  xlab("MPQ Stress Response")+ 
+  theme(legend.position = "bottom")
+```
+
+```{r}
+ggplot(data=musicdata,aes(x=mpqnem,y=na)) + 
+  geom_point() + 
+  geom_smooth(method="lm",color="black") + 
+  ylab("Negative Affect") + 
+  xlab("MPQ Negative Emotionality")
+
+ggplot(data=music.lev2,aes(x=mpqnem,y=meanbysubj)) + 
+  geom_point() + 
+  geom_smooth(method="lm",color="black") +
+  ylab("Negative Affect") + 
+  xlab("MPQ Negative Emotionality") 
+
+
+ggplot(data=musicdata,aes(x=mpqnem,y=na,color=audience)) + 
+  geom_point() + 
+  geom_smooth(method="lm") + 
+  ylab("Negative Affect") + 
+  xlab("MPQ Negative Emotionality")+ 
+  theme(legend.position = "bottom")
+
+ggplot(data=musicdata,aes(x=mpqnem,y=na, color=perform_type)) + 
+  geom_point() + 
+  geom_smooth(method="lm") + 
+  ylab("Negative Affect") + 
+  xlab("MPQ Negative Emotionality")+ 
+  theme(legend.position = "bottom")
+```
+
+```{r}
+ggplot(data=musicdata,aes(x=mpqpem,y=na)) + 
+  geom_point() + 
+  geom_smooth(method="lm",color="black") + 
+  ylab("Negative Affect") + 
+  xlab("MPQ Positive Emotionality")
+
+ggplot(data=music.lev2,aes(x=mpqpem,y=meanbysubj)) + 
+  geom_point() + 
+  geom_smooth(method="lm",color="black") + 
+  ylab("Mean Negative Affect") + 
+  xlab("MPQ Positive Emotionality") 
+
+ggplot(data=musicdata,aes(x=mpqpem,y=na,color=audience)) + 
+  geom_point() + 
+  geom_smooth(method="lm") + 
+  ylab("Negative Affect") + 
+  xlab("MPQ Positive Emotionality")+ 
+  theme(legend.position = "bottom")
+
+ggplot(data=musicdata,aes(x=mpqpem,y=na, color=perform_type)) + 
+  geom_point() + 
+  geom_smooth(method="lm") + 
+  ylab("Negative Affect") + 
+  xlab("MPQ Positive Emotionality")+ 
+  theme(legend.position = "bottom")
+```
+
+```{r}
+ggplot(data=musicdata,aes(x=mpqab,y=na)) + 
+  geom_point() + 
+  geom_smooth(method="lm",color="black") + 
+  ylab("Negative Affect") + 
+  xlab("MPQ Absoprtion")
+
+ggplot(data=music.lev2,aes(x=mpqab,y=meanbysubj)) + 
+  geom_point() + 
+  geom_smooth(method="lm",color="black") + 
+  ylab("Mean Negative Affect") + 
+  xlab("MPQ Absoprtion") 
+
+ggplot(data=musicdata,aes(x=mpqab,y=na,color=audience)) + 
+  geom_point() + 
+  geom_smooth(method="lm") + 
+  ylab("Negative Affect") + 
+  xlab("MPQ Absoprtion")+ 
+  theme(legend.position = "bottom")
+
+ggplot(data=musicdata,aes(x=mpqab,y=na, color=perform_type)) + 
+  geom_point() + 
+  geom_smooth(method="lm") + 
+  ylab("Negative Affect") + 
+  xlab("MPQ Absoprtion")+ 
+  theme(legend.position = "bottom")
+```
+
+## Start with a categorical level one -
+
+demonstrate how too much at this level blows stuff up...
+
+```{r}
+
+musicdata = mutate(musicdata,
+                   solo = ifelse(perform_type=="Solo",1,0),
+                   orch = ifelse(instrument=="orchestral instrument",1,0),
+                   vocal = ifelse(instrument=="voice",1,0),
+                   key = ifelse(instrument=="keyboard (piano or organ)", 1, 0),
+                   juried = ifelse(audience == "Juried Recital",1,0),
+                   instructor = ifelse(audience == "Instructor",1,0),
+                   student = ifelse(audience == "Student(s)",1,0),
+                   public =  ifelse(audience == "Public Performance",1,0),
+                   cmpqnem = mpqnem - mean(mpqnem),
+                   cmpqpem = mpqpem - mean(mpqpem),
+                   cmpqab = mpqab - mean(mpqab),
+                   cmpqsr = mpqsr - mean(mpqsr))
+
+
+```
+
+```{r}
+modelA = lmer(na ~ juried + public + instructor + (juried + public + instructor|id), data=musicdata, REML=T,control = lmerControl(optimizer ="Nelder_Mead"))
+summary(modelA)
+```
+
+```{r}
+modelB = lmer(na ~ previous + 
+                instructor + 
+                #juried +    # removed these and related terms first
+                #public +
+                solo + 
+                cmpqnem + 
+                cmpqpem + 
+                cmpqab +
+                orch + 
+                key +             # I don't feel comfortable removing this one
+              #  years_study +   # not significant   # removed this second
+                cmpqsr +            
+              #  solo:cmpqsr +   # not significant   # removed this third
+              #  solo:cmpqnem +    # not significant  # removed fourth
+                instructor:cmpqpem + 
+               # juried:cmpqpem +
+              #  public:cmpqpem +
+                (
+                  previous + 
+                   instructor + 
+                 #   juried + 
+                 #   public +
+                    solo|id), 
+              data=musicdata, REML=F,
+              control = lmerControl(optimizer ='optimx', optCtrl=list(method='nlminb')))
+summary(modelB)
+```
+
+```{r}
+bookmodel = lmer(na ~ previous + student + juried + public + solo + cmpqpem + cmpqab +orch + cmpqnem + solo:cmpqnem + (previous + student + juried + public + solo|id), data=musicdata, REML=F,
+              control = lmerControl(optimizer ='optimx', optCtrl=list(method='nlminb')))
+
+summary(bookmodel)
+```
