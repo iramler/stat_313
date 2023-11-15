@@ -1,0 +1,245 @@
+---
+title: "Introduction to Longitudinal Data"
+format: docx
+---
+
+## Load Libraries
+
+```{r}
+library(tidyverse)
+library(lme4)  # for fitting multilevel models
+library(Hmisc) # cut2 function for dividing dataset into quartiles
+```
+
+## Load Data
+
+```{r}
+chart.wide = read_csv(here::here("data/chart_wide_condense.csv"))
+
+#Changing percentage scale to 0 to 100
+chart.wide <- chart.wide %>%
+    mutate(SchPctFree = schPctfree*100, SchPctSped = schPctsped*100,
+         SchPctNonw = schPctnonw*100,
+         # use labels instead of 0/1 for urban/rural and charter/public.
+         urban0 = ifelse(urban==1, "urban", "rural"), 
+         charter0 = ifelse(charter==1, "charter", "public non-charter"))
+```
+
+Charter schools were first introduced in the state of Minnesota in 1991 (U.S. Department of Education 2018). Since then, charter schools have begun appearing all over the United States. While publicly funded, a unique feature of charter schools is their independence from many of the regulations that are present in the public school systems of their respective city or state. Thus, charters will often extend the school days or year and tend to offer non-traditional techniques and styles of instruction and learning. Comparisons of student performance in charter schools versus public schools have produced conflicting results, potentially as a result of the strong differences in the structure and population of the student bodies that represent the two types of schools.
+
+It is very challenging to compare charter and public non-charter schools, as charter schools are often designed to target or attract specific populations of students. Without accounting for differences in student populations, comparisons lose meaning. With the assistance of multiple school-specific predictors, we will attempt to model sixth grade math MCA-II scores of Minnesota schools, focusing on the differences between charter and public non-charter school performances.
+
+Key variables in `chart_wide_condense.csv` which we will examine to address the research questions above are:
+
+-   `schoolid` = includes district type, district number, and school number
+-   `schoolName` = name of school
+-   `urban` = is the school in an urban (1) or rural (0) location?
+-   `charter` = is the school a charter school (1) or a non-charter public school (0)?
+-   `schPctnonw` = proportion of non-white students in a school (based on 2010 figures)
+-   `schPctsped` = proportion of special education students in a school (based on 2010 figures)
+-   `schPctfree` = proportion of students who receive free or reduced lunches in a school (based on 2010 figures). This serves as a measure of poverty among school families.
+-   `MathAvgScore.0` = average MCA-II math score for all sixth grade students in a school in 2008
+-   `MathAvgScore.1` = average MCA-II math score for all sixth grade students in a school in 2009
+-   `MathAvgScore.2` = average MCA-II math score for all sixth grade students in a school in 2010
+
+**Tasks**
+
+1.  Identify the response variable.
+2.  Identify the Level One observational units
+3.  Identify the Level Two observational units
+4.  Identify the Level One covariate (there is only one)
+5.  Identify three Level Two covariates (there are five)
+
+## Wide Format versus Long Format
+
+This data is stored in WIDE format, with one row per school (and thus multiple responses in a single row). For most statistical analyses, it will be advantageous to convert WIDE format to LONG format, with one row per year per school. To make this conversion, we will have to create a time variable, which under the LONG format is very flexible---each school can have a different number of and differently-spaced time points, and they can even have predictors which vary over time.
+
+```{r}
+chart.long <- chart.wide %>%
+  pivot_longer(cols=MathAvgScore.0:MathAvgScore.2, 
+               names_to = "key", 
+               values_to = "MathAvgScore" ) %>%
+  separate(key, into = c("name", "year08"), sep = "\\.") %>%
+  select(-c(name)) %>%
+  arrange(schoolid, year08) %>%
+  mutate(year08 = as.numeric(year08))
+```
+
+For parts of the exploratory analysis, it will be convenient to work with the WIDE format and for other parts it will be convenient to work with the LONG format. For fitting models, we will use the LONG format (one response per row). Notice that in WIDE format, with one row per school, each value of the Level Two covariates appears once, but they are repeated in the LONG format.
+
+## Explore Data
+
+```{r}
+# Add to the wide format the average across all years for each school for EDA plots
+chart.means <- chart.long %>%
+  group_by(schoolid) %>%
+  summarise(mean3yr = mean(MathAvgScore, na.rm=T))
+chart.wide <- chart.wide %>%
+  left_join(chart.means, by="schoolid")
+```
+
+**Investigate the response variable**
+
+```{r}
+ggplot(data=chart.wide,aes(x=mean3yr)) + 
+  geom_histogram(binwidth=5,color="black",fill="steelblue") +
+  xlab("Mean Math Scores by School") + ylab("Frequency")
+
+ggplot(data=chart.long,aes(x=MathAvgScore)) + 
+  geom_histogram(binwidth=5,color="black",fill="steelblue") +
+  xlab("Math Scores by School (up to three observations per school)") + ylab("Frequency")
+```
+
+**Investigate the relationship between the response and the Level Two Covariates**
+
+```{r}
+ggplot(data=chart.wide,aes(x=factor(charter0),y=mean3yr)) + 
+  geom_boxplot(fill="mediumseagreen")  + ylab("Mean Math Scores by School") + 
+  xlab("")
+
+
+ggplot(data=chart.wide,aes(x=factor(urban0),y=mean3yr)) + 
+  geom_boxplot(fill="mediumseagreen") +ylab("Mean Math Scores by School")+ 
+  xlab("")
+```
+
+```{r}
+ggplot(data=chart.wide,aes(x=SchPctFree,y=mean3yr)) + 
+  geom_point(color="dark grey") +  xlab("Percent Free/Reduced Lunch") + 
+  ylab("Mean Math Scores by School") + 
+  geom_smooth(se=FALSE,method="lm",color="black")
+ggplot(data=chart.wide,aes(x=SchPctSped,y=mean3yr)) + 
+  geom_point(color="dark grey") +  xlab("Percent Special Ed") + 
+  ylab("Mean Math Scores by School") + 
+  geom_smooth(se=FALSE,method="lm",color="black")
+ggplot(data=chart.wide,aes(x=SchPctNonw,y=mean3yr)) + 
+  geom_point(color="dark grey")  + xlab("Percent Non-white") + 
+  ylab("Mean Math Scores by School") +  
+  geom_smooth(se=FALSE,method="lm",color="black")
+```
+
+**Investigate the relationship between the response and the Level One Covariate (Year)** "Spaghetti Plots" which overlay the individual schools' time trends (for the math test scores) on a single set of axes are common for longitudinal data, especially when a smoother is used to illustrate the overall time trend.
+
+Unfortunately, when there are a large number of subjects, it can be hard to see what is happening in a spaghetti plot. Thus, here we plot a random sample of the schools.
+
+```{r}
+set.seed(782492) # set seed so we all have the same sample
+schools = sample(chart.wide$schoolName, 200)
+sampdata = chart.long %>% filter(schoolName %in% schools)
+ggplot(sampdata ,aes(x=year08,y=MathAvgScore)) + 
+  geom_line(aes(group=schoolid),color="dark grey") + 
+  geom_smooth(aes(group=1),color="black",size=1) + 
+  labs(x="Years since 2008",y="Math Score")+ 
+  scale_x_continuous(limits=c(0,2), breaks=c(0,1,2))
+```
+
+Explore how the Level Two covariates affect the trend of math scores (response) over time (Level One covariate)
+
+```{r}
+ggplot(sampdata,aes(x=year08,y=MathAvgScore)) + 
+  geom_line(aes(group=schoolid),color="dark grey") + 
+  facet_grid(.~charter0) + 
+  geom_smooth(aes(group=1),color="black",size=1) + 
+  labs(x="Years since 2008",y="Math Scores") + 
+  scale_x_continuous(limits=c(0,2), breaks=c(0,1,2))
+```
+
+```{r}
+sampdata <- sampdata %>%
+  mutate(splitup = paste("Quartile", as.numeric(cut2(schPctfree, g=4))))  # cut2 from Hmisc
+
+ggplot(sampdata,aes(x=year08,y=MathAvgScore)) + 
+  geom_line(aes(group=schoolid),color="dark grey") + 
+  facet_grid(~splitup) +
+  labs(x="Years since 2008",y="Math Scores") + 
+  scale_x_continuous(limits=c(0,2), breaks=c(0,1,2)) +
+  geom_smooth(method="loess",color="black",se=FALSE,size=.75)
+```
+
+```{r}
+ggplot(sampdata,aes(x=year08,y=MathAvgScore)) + 
+  geom_line(aes(group=schoolid),color="dark grey") + 
+  facet_grid(.~urban0) + 
+  geom_smooth(aes(group=1),color="black",size=1) + 
+  labs(x="Years since 2008",y="Math Scores") + 
+  scale_x_continuous(limits=c(0,2), breaks=c(0,1,2))
+```
+
+```{r}
+sampdata <- sampdata %>%
+  mutate(splitupSped = paste("Quartile", as.numeric(cut2(schPctsped, g=4))))  # cut2 from Hmisc
+
+ggplot(sampdata,aes(x=year08,y=MathAvgScore)) + 
+  geom_line(aes(group=schoolid),color="dark grey") + 
+  facet_grid(~splitupSped) + 
+  geom_smooth(aes(group=1),color="black",size=1) + 
+  labs(x="Years since 2008",y="Math Scores") + 
+  scale_x_continuous(limits=c(0,2), breaks=c(0,1,2))
+```
+
+*I forgot this one on the handout*
+
+```{r}
+sampdata <- sampdata %>%
+  mutate(splitupNonW = paste("Quartile", as.numeric(cut2(schPctnonw, g=4))))  # cut2 from Hmisc
+
+ggplot(sampdata,aes(x=year08,y=MathAvgScore)) + 
+  geom_line(aes(group=schoolid),color="dark grey") + 
+  facet_grid(~splitupNonW) + 
+  geom_smooth(aes(group=1),color="black",size=1) + 
+  labs(x="Years since 2008",y="Math Scores") + 
+  scale_x_continuous(limits=c(0,2), breaks=c(0,1,2))
+```
+
+## Models
+
+Unconditional Means Model
+
+```{r}
+unmeans = lmer(MathAvgScore ~ 1 + (1|schoolid),data=chart.long, REML=T)
+summary(unmeans)
+```
+
+"Unconditional Growth Model" = no predictors at level two
+
+```{r}
+modelA = lmer(MathAvgScore ~ year08 + (year08|schoolid),data=chart.long, REML=T)
+summary(modelA)
+```
+
+```{r}
+modelB = lmer(MathAvgScore ~ year08 + charter + year08:charter + (year08|schoolid),data=chart.long, REML=T)
+summary(modelB)
+```
+
+```{r}
+
+modelC = lmer(MathAvgScore ~ year08 + charter + SchPctFree + year08:charter +
+                year08:SchPctFree + (year08|schoolid),data=chart.long, REML=T)
+summary(modelC)
+
+```
+
+Book final model
+
+```{r}
+
+modelD = lmer(MathAvgScore ~ year08 + charter + SchPctFree + urban + SchPctSped + year08:charter +
+                #year08:SchPctFree + 
+                year08:urban + year08:SchPctSped +
+                (year08|schoolid),data=chart.long, REML=T)
+summary(modelD)
+
+```
+
+```{r}
+
+modelE = lmer(MathAvgScore ~ year08 + charter + SchPctFree + urban + SchPctSped + year08:charter +
+                #year08:SchPctFree + 
+                SchPctNonw + year08:SchPctNonw +
+                year08:urban + 
+                year08:SchPctSped + (year08|schoolid),data=chart.long, REML=T,
+               control = lmerControl(optimizer ='optimx', optCtrl=list(method='nlminb')))
+summary(modelE)
+
+```
