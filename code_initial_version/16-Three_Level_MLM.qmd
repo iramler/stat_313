@@ -1,0 +1,299 @@
+---
+title: "Multilevel Data with More Than Two Levels"
+format: docx
+---
+
+# Multilevel Data With More Than Two Levels
+
+```{r load_packages10, message = FALSE, warning = FALSE}
+library(lme4)
+library(tidyverse)
+```
+
+## Case Study: Seed Germination
+
+It is estimated that 82-99\% of historic tallgrass prairie ecosystems have been converted to agricultural use. Such large-scale alteration of prairie communities has been associated with numerous problems. For example, erosion and decomposition that readily take place in cultivated soils have increased atmospheric $\textrm{CO}_2$ levels and increased nitrogen inputs to adjacent waterways. There have been many responses to these problems, but one response in recent years is reconstruction of the native prairie community. 
+
+A study design to investigate this reconstruction is illustrated below.
+
+```{r, seedstudy, out.width='80%', fig.show='hold', fig.cap="The design of the seed germination study.", echo=FALSE}
+knitr::include_graphics("StudyDesignDiagram.PNG")
+```
+
+## Data Organization
+
+The data in `seeds2.csv` is stored in wide format, with one row per plant. As we have done in previous multilevel analyses, we will convert to long format (one observation per plant-time combination).
+
+- `pot` = Pot plant was grown in (1-72)
+- `plant` = Unique plant identification number
+- `species` = L for leadplant and C for coneflower
+- `soil` = STP for reconstructed prairie, REM for remnant prairie, and CULT for cultivated land
+- `sterile` = Y for yes and N for no
+- `germin` = Y if plant germinated, N if not
+-  `time` = days after the seeds are planted
+- `hgt` = height of plant (in mm) <time> days after seeds planted
+- `time13` = time - 13
+
+
+```{r, include=FALSE}
+seedwd <- read.csv("data/seeds2.csv")
+# Remove plants that did not germinate
+seedwd <- seedwd |>
+  mutate(nope = is.na(hgt13) + is.na(hgt18) + is.na(hgt23) +
+           is.na(hgt28)) |>
+  filter(nope < 4)
+
+# Create data frame in LONG form (one obs per plant 
+#   measurement time)
+seedlg <- seedwd |>
+  pivot_longer(cols = hgt13:hgt28, 
+               names_to = "time", values_to = "hgt") |>
+  mutate(time = parse_number(time),time13 = time - 13 ) 
+
+# create indicator variables for later analyses
+seedlg <- seedlg |>
+  mutate(cult=ifelse(soil=="CULT",1,0),
+         rem=ifelse(soil=="REM",1,0),
+         stp=ifelse(soil=="STP",1,0),
+         lead=ifelse(species=="L",1,0),
+         cone=ifelse(species=="C",1,0),
+         strl=ifelse(sterile=="Y",1,0),
+         nostrl=ifelse(sterile=="N",1,0) )
+
+# create separate data sets of leadplants and coneflowers
+# Researchers have shown that these plants should be analyzed separately
+conedata <- seedlg |>
+  filter(cone==1)
+
+leaddata <- seedlg |>
+  filter(lead==1)
+
+leaddata <- leaddata |>
+  mutate(soilname = recode(soil, STP="Reconstructed",
+                           CULT="Cultivated", REM="Remnant") )
+
+leaddata <- leaddata |>
+  mutate(sterilename = recode(sterile, Y="Sterilized", 
+                              N="Not Sterilized") )
+```
+
+
+
+## Initial Exploratory Analyses 
+
+Please see [Chapter 10.3  of the textbook](https://bookdown.org/roback/bookdown-BeyondMLR/ch-3level.html#explore3){target="_blank"} for the exploratory analyses details.
+
+
+## Initial Models
+
+The structure and notation for three level models will closely resemble the structure and notation for two-level models, just with extra subscripts.
+
+### Unconditional Means
+
+- Level One (timepoint within plant):
+
+\begin{equation*}
+Y_{ijk} = a_{ij}+\epsilon_{ijk} \textrm{ where } \epsilon_{ijk}\sim N(0,\sigma^2)
+\end{equation*}
+
+- Level Two (plant within pot):
+
+\begin{equation*}
+a_{ij} = a_{i}+u_{ij} \textrm{ where } u_{ij}\sim N(0,\sigma_{u}^{2})
+\end{equation*}
+
+- Level Three (pot):
+
+\begin{equation*}
+a_{i} = \alpha_{0}+\tilde{u}_{i} \textrm{ where } \tilde{u}_{i} \sim N(0,\sigma_{\tilde{u}}^{2})
+\end{equation*}
+
+where the heights of plants from different pots are considered independent, but plants from the same pot are correlated as well as measurements at different times from the same plant.
+
+Here is a quick guide to the meaning of terms found in our three-level model:
+
+- $Y_{ijk}$ is the height (in mm) of plant $j$ from pot $i$ at time $k$
+- $a_{ij}$ is the true mean height for plant $j$ from pot $i$ across all time points. This is not considered a model parameter, since we further model $a_{ij}$ at Level Two.
+- $a_{i}$ is the true mean height for pot $i$ across all plants from that pot and all time points. This is also not considered a model parameter, since we further model $a_{i}$ at Level Three.
+- $\alpha_{0}$ is a fixed effects model parameter representing the true mean height across all pots, plants, and time points.
+- $\epsilon_{ijk}$ describes how far an observed height $Y_{ijk}$ is from the mean height for plant $j$ from pot $i$.
+- $u_{ij}$ describe how far the mean height of plant $j$ from pot $i$ is from the mean height of all plants from pot $i$.
+- $\tilde{u}_{i}$ describes how far the mean height of all observations from pot $i$ is from the overall mean height across all pots, plants, and time points. None of the error terms ($\epsilon, u, \tilde{u}$) are considered model parameters; they simply account for differences between the observed data and expected values under our model.
+- $\sigma^2$ is a variance component (random effects model parameter) that describes within-plant variability over time.
+- $\sigma_{u}^{2}$ is the variance component describing plant-to-plant variability within pot.
+- $\sigma_{\tilde{u}}^{2}$ is the variance component describing pot-to-pot variability.
+
+The three-level unconditional means model can also be expressed as a composite model:
+
+\begin{equation*}
+Y_{ijk}=\alpha_{0}+\tilde{u}_{i}+u_{ij}+\epsilon_{ijk}
+\end{equation*}
+
+
+```{r, comment=NA}
+# Model A - unconditional means
+modelal = lmer(hgt ~ 1 + (1|plant) + (1|pot), 
+               REML=T, data=leaddata)
+summary(modelal)
+```
+
+From this output, we obtain estimates of our four model parameters:
+
+- $\hat{\alpha}_{0}=2.39=$ the mean height (in mm) across all time points, plants, and pots.
+- $\hat{\sigma}^2=0.728=$ the variance over time within plants.
+- $\hat{\sigma}_{u}^{2}=0.278=$ the variance between plants from the same pot.
+- $\hat{\sigma}_{\tilde{u}}^{2}=0.049=$ the variance between pots.
+
+From the estimates of variance components, 
+
+- 69.0\% of total variability in height measurements is due to differences over time for each plant, 
+- 26.4\% of total variability is due to differences between plants from the same pot, 
+- 4.6\% of total variability is due to difference between pots. 
+
+### Unconditional Growth
+
+The three-level unconditional growth model (Model B) can be specified either using formulations at each level:
+
+- Level One (timepoint within plant):
+
+\begin{equation*}
+Y_{ijk} = a_{ij}+b_{ij}\textrm{time}_{ijk}+\epsilon_{ijk}
+\end{equation*}
+
+- Level Two (plant within pot):
+
+\begin{align*}
+a_{ij} & = a_{i}+u_{ij} \\
+b_{ij} & = b_{i}+v_{ij}
+\end{align*}
+
+- Level Three (pot):
+
+\begin{align*}
+a_{i} & = \alpha_{0}+\tilde{u}_{i} \\
+b_{i} & = \beta_{0}+\tilde{v}_{i}
+\end{align*}
+
+or as a composite model:
+
+\begin{equation*}
+Y_{ijk}=[\alpha_{0}+\beta_{0}\textrm{time}_{ijk}]+
+[\tilde{u}_{i}+{v}_{ij}+\epsilon_{ijk}+(\tilde{v}_{i}+{v}_{ij})\textrm{time}_{ijk}]
+\end{equation*}
+
+where $\epsilon_{ijk}\sim N(0,\sigma^2)$,
+
+\[ \left[ \begin{array}{c}
+            u_{ij} \\ v_{ij}
+          \end{array}  \right] \sim N \left( \left[
+          \begin{array}{c}
+            0 \\ 0
+          \end{array} \right], \left[
+          \begin{array}{cc}
+            \sigma_{u}^{2} & \\
+            \sigma_{uv} & \sigma_{v}^{2}
+          \end{array} \right] \right), \] and
+          
+\[ \left[ \begin{array}{c}
+            \tilde{u}_{i} \\ \tilde{v}_{i}
+          \end{array}  \right] \sim N \left( \left[
+          \begin{array}{c}
+            0 \\ 0
+          \end{array} \right], \left[
+          \begin{array}{cc}
+            \sigma_{\tilde{u}}^{2} & \\
+            \sigma_{\tilde{u}\tilde{v}} & \sigma_{\tilde{v}}^{2}
+          \end{array} \right] \right). \]
+
+Using the composite model specification, the unconditional growth model can be fit to the seed germination data:
+
+```{r, comment=NA}
+# Model B - unconditional growth
+modelbl = lmer(hgt ~ time13 + (time13|plant) + (time13|pot),
+               REML=T, data=leaddata)
+summary(modelbl)
+```
+
+From this output, we obtain estimates of our nine model parameters (two fixed effects and seven variance components):
+
+- $\hat{\alpha}_{0}=1.538=$ the mean height of leadplants 13 days after planting.
+- $\hat{\beta}_{0}=0.112=$ the mean daily change in height of leadplants from 13 to 28 days after planting.
+- $\hat{\sigma}=.287=$ the standard deviation in within-plant residuals after accounting for time.
+- $\hat{\sigma}_{u}=.547=$ the standard deviation in Day 13 heights between plants from the same pot.
+- $\hat{\sigma}_{v}=.0346=$ the standard deviation in rates of change in height between plants from the same pot.
+- $\hat{\rho}_{uv}=.280=$ the correlation in plants' Day 13 height and their rate of change in height.
+- $\hat{\sigma}_{\tilde{u}}=.210=$ the standard deviation in Day 13 heights between pots.
+- $\hat{\sigma}_{\tilde{v}}=.0355=$ the standard deviation in rates of change in height between pots.
+- $\hat{\rho}_{\tilde{u}\tilde{v}}=-.610=$ the correlation in pots' Day 13 height and their rate of change in height.
+
+We see that, on average, leadplants have a height of 1.54 mm 13 days after planting (pooled across pots and treatment groups), and their heights tend to grow by 0.11 mm per day, producing an average height at the end of the study (Day 28) of 3.22 mm. According to the t-values listed in R, both the Day 13 height and the growth rate are statistically significant. The estimated within-plant variance $\hat{\sigma}^2$ decreased by 88.7\% from the unconditional means model (from 0.728 to 0.082), implying that 88.7\% of within-plant variability in height can be explained by linear growth over time.
+
+
+### Comparison of Model A and B
+
+$H_0:$
+
+$H_A:$
+
+
+```{r}
+# anova(modelbl, modelal) #shortcut...but we should practice "by hand" too.
+```
+
+
+## Build a Final Model
+
+### Model F
+
+In our final model we consider the main effects of soil type and sterilization on leadplant growth rateas well as interactions (as the biology researchers expect that sterilization will aid growth in certain soil types more than others) 
+
+Further, to form Model F, we remove all covariates describing the intercept (Day 13 height), since neither sterilization nor soil type nor their interaction appears to be significantly related to initial height. (See Model D from the text.)
+
+- Level One:
+
+\begin{equation*}
+Y_{ijk} = a_{ij}+b_{ij}\textrm{time}_{ijk}+\epsilon_{ijk}
+\end{equation*}
+
+- Level Two:
+
+\begin{align*}
+a_{ij} & = a_{i}+u_{ij} \\
+b_{ij} & = b_{i}+v_{ij}
+\end{align*}
+
+- Level Three:
+
+\begin{align*}
+a_{i} & = \alpha_{0} + \tilde{u}_{i} \\
+b_{i} & = \beta_{0}+\beta_{1}\textrm{strl}_{i}+\beta_{2}\textrm{rem}_{i} + \beta_{3}\textrm{strl}_{i}\textrm{rem}_{i}
+\end{align*}
+
+where $\epsilon_{ijk}\sim N(0,\sigma^2)$,
+
+\[ \left[ \begin{array}{c}
+            u_{ij} \\ v_{ij}
+          \end{array}  \right] \sim N \left( \left[
+          \begin{array}{c}
+            0 \\ 0
+          \end{array} \right], \left[
+          \begin{array}{cc}
+            \sigma_{u}^{2} & \\
+            \sigma_{uv} & \sigma_{v}^{2}
+          \end{array} \right] \right), \]
+and $\tilde{{u}_{i}}\sim N(0,\sigma_{\tilde{u}}^{2})$.
+
+In composite form, we have:
+
+\begin{align*}
+Y_{ijk} & = [\alpha_{0}+ \beta_{0}\textrm{time}_{ijk} + \beta_{1}\textrm{strl}_{i}\textrm{time}_{ijk} + \beta_{2}\textrm{rem}_{i}\textrm{time}_{ijk}  \\
+ & + \beta_{3}\textrm{strl}_{i}\textrm{rem}_{i}\textrm{time}_{ijk}] + [\tilde{u}_{i}+u_{ij}+ \epsilon_{ijk}+ v_{ij}\textrm{time}_{ijk}]
+\end{align*}
+
+```{r, comment=NA, message=F}
+# Model F - simplify and move toward "final model"
+modelfl0 = lmer(hgt ~ time13 + time13:strl + 
+  time13:rem + time13:strl:rem +
+  (time13|plant) + (1|pot), REML=T, data=leaddata)
+summary(modelfl0)
+```
